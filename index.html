@@ -573,7 +573,9 @@ input[type="file"] { display: none; }
   </style>
 </head>
 <body>
-<header class="global-nav">
+
+  <div class="container">
+  <header class="global-nav">
   <div class="global-nav__inner">
     <a class="global-nav__brand" href="https://erofly83-arch.github.io/pricematcher/">
       Навигатор
@@ -595,7 +597,6 @@ input[type="file"] { display: none; }
     </nav>
   </div>
 </header>
-  <div class="container">
     <div class="header">
       <h1>
         🎯 Smart Matcher 
@@ -1166,7 +1167,12 @@ input[type="file"] { display: none; }
           if (value.length > 0 && value[0]) {
             name = String(value[0]).trim();
           }
-          if (value.length > 1 && value[1]) {
+          // Поддержка двух форматов JSON:
+          // 1. sinonims_with_nav: ["name", "syn1", "syn2", ...] — каждый синоним отдельным элементом
+          // 2. CSV/XLSX: ["name", "syn1; syn2; syn3"] — синонимы строкой через ";"
+          if (value.length > 2) {
+            synonyms = value.slice(1).map(s => String(s).trim()).filter(s => s && isBarcode(s));
+          } else if (value.length === 2 && value[1]) {
             const synonymsStr = String(value[1]).trim();
             if (synonymsStr) {
               synonyms = synonymsStr.split(';').map(s => s.trim()).filter(s => s && isBarcode(s));
@@ -1514,30 +1520,41 @@ input[type="file"] { display: none; }
       filterByView(currentView);
     }
 
-    function exportJSON() {
+    async function exportJSON() {
       const updated = JSON.parse(JSON.stringify(jsonData));
 
       changesMap.forEach((change, barcode) => {
         if (change.action === 'add_synonym') {
-          const mainBarcode = change.mainBarcode;
-          const currentData = updated[mainBarcode];
+          // Исправлено: используем jsonKey — реальный ключ записи в jsonData
+          const lookupKey = change.jsonKey || change.mainBarcode;
+          const currentData = updated[lookupKey];
 
-          if (Array.isArray(currentData) && currentData.length >= 2) {
+          if (Array.isArray(currentData) && currentData.length >= 1) {
             const name = currentData[0];
-            let synonymsStr = currentData[1] || '';
-            let synonyms = synonymsStr ? synonymsStr.split(';').map(s => s.trim()).filter(s => s) : [];
 
-            if (!synonyms.includes(barcode)) {
+            // Исправлено: читаем ВСЕ существующие синонимы (оба формата)
+            // Формат sinonims_with_nav: ["name","syn1","syn2",...] — элементы массива
+            // Формат CSV/XLSX:          ["name","syn1; syn2;..."] — строка через ";"
+            let synonyms = [];
+            if (currentData.length > 2) {
+              synonyms = currentData.slice(1).map(s => String(s).trim()).filter(Boolean);
+            } else if (currentData.length === 2 && currentData[1]) {
+              synonyms = String(currentData[1]).trim().split(';').map(s => s.trim()).filter(Boolean);
+            }
+
+            // Исправлено: добавляем штрихкод из прайса (barcode = ключ changesMap)
+            if (barcode && !synonyms.includes(barcode)) {
               synonyms.push(barcode);
             }
 
-            updated[mainBarcode] = [name, synonyms.join('; ')];
+            // Исправлено: сохраняем в формате sinonims_with_nav — ["name", "syn1", "syn2", ...]
+            updated[lookupKey] = [name, ...synonyms];
           }
         } else if (change.action === 'set_main') {
           const oldKey = change.jsonKey;
           const oldName = change.mainName;
 
-          updated[barcode] = [oldName, ''];
+          updated[barcode] = [oldName];
 
           if (updated[oldKey]) {
             delete updated[oldKey];
@@ -1546,18 +1563,38 @@ input[type="file"] { display: none; }
       });
 
       const json = JSON.stringify(updated, null, 2);
+      const timestamp = new Date().toISOString().slice(0, 10);
+      const fileName = `synonyms_v2.2_${timestamp}.json`;
+
+      // File System Access API — диалог "Сохранить как" с выбором папки
+      if (window.showSaveFilePicker) {
+        try {
+          const fileHandle = await window.showSaveFilePicker({
+            suggestedName: fileName,
+            types: [{ description: 'JSON файл', accept: { 'application/json': ['.json'] } }]
+          });
+          const writable = await fileHandle.createWritable();
+          await writable.write(json);
+          await writable.close();
+          alert(`✅ JSON успешно сохранён!\n\nДобавлено: ${changesMap.size} изменений\nФайл: ${fileHandle.name}`);
+          return;
+        } catch (err) {
+          if (err.name === 'AbortError') return;
+          console.warn('showSaveFilePicker недоступен, используем запасной вариант:', err);
+        }
+      }
+
+      // Запасной вариант для браузеров без File System Access API
       const blob = new Blob([json], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      const timestamp = new Date().toISOString().slice(0, 10);
-      a.download = `synonyms_v2.2_${timestamp}.json`;
+      a.download = fileName;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
-
-      alert(`✅ JSON обновлён (V2.2)!\n\nДобавлено: ${changesMap.size} изменений\nФайл: synonyms_v2.2_${timestamp}.json`);
+      alert(`✅ JSON обновлён!\n\nДобавлено: ${changesMap.size} изменений\nФайл: ${fileName}`);
     }
 
     document.getElementById('confirmModal').addEventListener('click', function(e) {
