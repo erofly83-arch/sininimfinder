@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>🎯 Smart Matcher V2.2 — Универсальная загрузка!</title>
+  <title>🎯 Smart Matcher V3.0 — Умный поиск по названиям!</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
   <style>
@@ -11,9 +11,6 @@
 
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  padding: 20px;
-  min-height: 100vh;
 }
 
 .container { max-width: 1600px; margin: 0 auto; }
@@ -21,8 +18,8 @@ body {
 .header {
   background: white;
   border-radius: 16px;
-  padding: 24px;
-  margin-bottom: 20px;
+  padding: 18px 24px;
+  margin-bottom: 16px;
   box-shadow: 0 8px 32px rgba(0,0,0,0.1);
 }
 
@@ -68,65 +65,6 @@ h1 {
 .export-top.show { display: inline-block; }
 .export-top:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(52, 199, 89, 0.4); }
 .export-count { background: rgba(255,255,255,0.3); padding: 2px 8px; border-radius: 10px; margin-left: 8px; }
-
-.upload-panel {
-  background: white;
-  border-radius: 16px;
-  padding: 24px;
-  margin-bottom: 20px;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-}
-
-.upload-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-
-.upload-box {
-  border: 2px dashed #e5e5ea;
-  border-radius: 12px;
-  padding: 24px;
-  text-align: center;
-  transition: all 0.3s;
-  cursor: pointer;
-}
-
-.upload-box:hover { border-color: #667eea; background: #f9f9fb; }
-.upload-box.loaded { border-color: #34c759; background: #f0fdf4; }
-
-.upload-icon { font-size: 48px; margin-bottom: 12px; }
-.upload-title { font-size: 16px; font-weight: 600; color: #1c1c1e; margin-bottom: 8px; }
-.upload-desc { font-size: 13px; color: #8e8e93; margin-bottom: 16px; line-height: 1.4; }
-
-.format-badges {
-  display: flex;
-  gap: 6px;
-  justify-content: center;
-  margin-bottom: 16px;
-}
-
-.format-badge {
-  background: #e8f0ff;
-  color: #667eea;
-  padding: 3px 8px;
-  border-radius: 8px;
-  font-size: 11px;
-  font-weight: 600;
-}
-
-.upload-btn {
-  background: #667eea;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 8px;
-  font-weight: 600;
-  font-size: 14px;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.upload-btn:hover { background: #5568d3; transform: translateY(-2px); }
-.upload-status { margin-top: 12px; font-size: 13px; color: #34c759; font-weight: 500; }
-
-input[type="file"] { display: none; }
 
 .stats-bar {
   background: white;
@@ -506,77 +444,260 @@ input[type="file"] { display: none; }
   width: 0%;
 }
 
+/* НОВЫЕ СТИЛИ V3.0 */
+.candidates-section {
+  margin-top: 12px;
+  border-top: 1px dashed #e5e5ea;
+  padding-top: 12px;
+}
+
+.candidates-title {
+  font-size: 11px;
+  font-weight: 700;
+  color: #8e8e93;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.candidate-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  margin-bottom: 6px;
+  cursor: pointer;
+  border: 1.5px solid transparent;
+  transition: all 0.2s;
+  background: #f2f2f7;
+}
+
+.candidate-item:hover {
+  border-color: #667eea;
+  background: #e8f0ff;
+}
+
+.candidate-item.selected {
+  border-color: #34c759;
+  background: #f0fdf4;
+}
+
+.candidate-score {
+  font-size: 12px;
+  font-weight: 700;
+  color: white;
+  padding: 2px 7px;
+  border-radius: 8px;
+  min-width: 40px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.candidate-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: #1c1c1e;
+  flex: 1;
+  text-transform: uppercase;
+}
+
+.candidate-bc {
+  font-size: 11px;
+  color: #667eea;
+  font-family: monospace;
+  flex-shrink: 0;
+}
+
+.result-card.review-card { border-color: #af52de; background: #fdf4ff; }
+.similarity-review { background: #af52de; }
+.action-review { background: #af52de; color: white; }
+
+.diff-indicator {
+  display: inline-block;
+  padding: 2px 7px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  margin-left: 6px;
+}
+
+.diff-weight { background: #ff3b30; color: white; }
+.diff-ok { background: #34c759; color: white; }
+
+.weight-warning {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: #fff3cd;
+  border: 1px solid #ffc107;
+  border-radius: 6px;
+  padding: 3px 8px;
+  font-size: 11px;
+  color: #856404;
+  font-weight: 600;
+  margin-top: 6px;
+}
+
+.select-candidate-btn {
+  background: #667eea;
+  color: white;
+  border: none;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.2s;
+}
+
+.select-candidate-btn:hover { background: #5568d3; }
+
+.trigram-score {
+  font-size: 10px;
+  color: #8e8e93;
+  margin-left: 4px;
+}
+
+
 @media (max-width: 768px) {
-  .upload-grid { grid-template-columns: 1fr; }
-  .stats-grid { grid-template-columns: 1fr; }
+  .upload-grid { flex-direction: column; }
+  .stats-grid { grid-template-columns: repeat(2,1fr) !important; }
   .modal-actions { grid-template-columns: 1fr; }
 }
-:root { --global-nav-h: 52px; }
 
-.global-nav{
-  position: sticky;
-  top: 0;
-  z-index: 5000;
-  background: rgba(255,255,255,0.92);
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(0,0,0,0.08);
+/* ===== NAV — встроен в дизайн ===== */
+.global-nav {
+  max-width: 1600px;
+  margin: 0 auto 16px auto;
+  background: rgba(255,255,255,0.15);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,0.28);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.12);
 }
 
-.global-nav__inner{
-  max-width: 1600px;
-  margin: 0 auto;
-  padding: 10px 14px;
+.global-nav__inner {
+  padding: 10px 16px;
   display: flex;
   align-items: center;
   gap: 12px;
   flex-wrap: wrap;
 }
 
-.global-nav__brand{
+.global-nav__brand {
   text-decoration: none;
   font-weight: 800;
-  color: #1c1c1e;
+  font-size: 14px;
+  color: #fff;
   white-space: nowrap;
+  opacity: 0.9;
 }
 
-.global-nav__links{
+.global-nav__links {
   display: flex;
-  gap: 8px;
+  gap: 6px;
   flex-wrap: wrap;
   align-items: center;
 }
 
-.global-nav__link{
+.global-nav__link {
   text-decoration: none;
-  font-size: 13px;
-  font-weight: 650;
-  color: #007aff;
-  background: rgba(0,122,255,0.08);
-  border: 1px solid rgba(0,122,255,0.18);
-  padding: 6px 10px;
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.88);
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.28);
+  padding: 5px 12px;
   border-radius: 999px;
   white-space: nowrap;
-  transition: transform .12s ease, background .12s ease;
+  transition: all .15s ease;
 }
 
-.global-nav__link:hover{
-  transform: translateY(-1px);
-  background: rgba(0,122,255,0.14);
-}
-
-.global-nav__link.is-active{
+.global-nav__link:hover {
+  background: rgba(255,255,255,0.28);
   color: #fff;
-  background: #007aff;
-  border-color: #007aff;
+  transform: translateY(-1px);
 }
+
+.global-nav__link.is-active {
+  color: #667eea;
+  background: #fff;
+  border-color: #fff;
+}
+
+/* ===== КОМПАКТНАЯ ЗАГРУЗКА ===== */
+.upload-panel {
+  background: white;
+  border-radius: 16px;
+  padding: 12px 16px;
+  margin-bottom: 16px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+}
+
+.upload-grid {
+  display: flex;
+  gap: 10px;
+  align-items: stretch;
+}
+
+.upload-box {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: 2px dashed #e5e5ea;
+  border-radius: 10px;
+  padding: 12px 14px;
+  transition: all 0.25s;
+  cursor: pointer;
+}
+
+.upload-box:hover { border-color: #667eea; background: #f9f9fb; }
+.upload-box.loaded { border-color: #34c759; background: #f0fdf4; }
+
+.upload-icon { font-size: 24px; flex-shrink: 0; line-height: 1; }
+.upload-info { flex: 1; min-width: 0; }
+.upload-title { font-size: 13px; font-weight: 700; color: #1c1c1e; margin-bottom: 2px; }
+.upload-desc { font-size: 11px; color: #8e8e93; line-height: 1.3; }
+
+.upload-right { display: flex; flex-direction: column; align-items: flex-end; gap: 5px; flex-shrink: 0; }
+
+.format-badges { display: flex; gap: 4px; }
+.format-badge {
+  background: #e8f0ff;
+  color: #667eea;
+  padding: 2px 6px;
+  border-radius: 6px;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.upload-btn {
+  background: #667eea;
+  color: white;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 7px;
+  font-weight: 600;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.upload-btn:hover { background: #5568d3; }
+.upload-status { font-size: 11px; color: #34c759; font-weight: 600; white-space: nowrap; text-align: right; }
+
+input[type="file"] { display: none; }
 
   </style>
 </head>
-<body>
+<body style="background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);min-height:100vh;padding:16px;">
 <header class="global-nav">
   <div class="global-nav__inner">
     <a class="global-nav__brand" href="https://erofly83-arch.github.io/pricematcher/">
-      Навигатор
+      🧭 Навигатор
     </a>
 
     <nav class="global-nav__links" aria-label="Навигация по приложениям">
@@ -599,12 +720,8 @@ input[type="file"] { display: none; }
     <div class="header">
       <h1>
         🎯 Smart Matcher 
-        <span class="version-badge">V2.2</span>
+        <span class="version-badge">V3.0</span>
       </h1>
-      <div class="subtitle">
-        Умный матчинг товаров | Поддержка JSON, CSV, XLSX
-      </div>
-
       <button class="export-top" id="exportTopBtn" onclick="exportJSON()">
         💾 Сохранить обновлённый JSON <span class="export-count" id="exportTopCount">0</span>
       </button>
@@ -614,33 +731,36 @@ input[type="file"] { display: none; }
       <div class="upload-grid">
         <div class="upload-box" id="jsonBox" onclick="document.getElementById('jsonInput').click()">
           <div class="upload-icon">📦</div>
-          <div class="upload-title">База синонимов</div>
-          <div class="upload-desc">
-            JSON, CSV или XLSX с колонками:<br>
-            <strong>Штрихкод | Название | Синонимы</strong>
+          <div class="upload-info">
+            <div class="upload-title">База синонимов</div>
+            <div class="upload-desc">JSON / CSV / XLSX · Штрихкод | Название | Синонимы</div>
+            <div class="upload-status" id="jsonStatus"></div>
           </div>
-          <div class="format-badges">
-            <span class="format-badge">JSON</span>
-            <span class="format-badge">CSV</span>
-            <span class="format-badge">XLSX</span>
+          <div class="upload-right">
+            <div class="format-badges">
+              <span class="format-badge">JSON</span>
+              <span class="format-badge">CSV</span>
+              <span class="format-badge">XLSX</span>
+            </div>
+            <button class="upload-btn">📂 Выбрать</button>
           </div>
-          <button class="upload-btn">Выбрать файл</button>
-          <div class="upload-status" id="jsonStatus"></div>
           <input type="file" id="jsonInput" accept=".json,.csv,.xlsx,.xls">
         </div>
 
         <div class="upload-box" id="priceBox" onclick="document.getElementById('priceInput').click()">
           <div class="upload-icon">📄</div>
-          <div class="upload-title">Прайс поставщика</div>
-          <div class="upload-desc">
-            CSV или XLSX с товарами
+          <div class="upload-info">
+            <div class="upload-title">Прайс поставщика</div>
+            <div class="upload-desc">CSV / XLSX · Штрихкод | Наименование</div>
+            <div class="upload-status" id="priceStatus"></div>
           </div>
-          <div class="format-badges">
-            <span class="format-badge">CSV</span>
-            <span class="format-badge">XLSX</span>
+          <div class="upload-right">
+            <div class="format-badges">
+              <span class="format-badge">CSV</span>
+              <span class="format-badge">XLSX</span>
+            </div>
+            <button class="upload-btn">📂 Выбрать</button>
           </div>
-          <button class="upload-btn">Выбрать файл</button>
-          <div class="upload-status" id="priceStatus"></div>
           <input type="file" id="priceInput" accept=".csv,.xlsx,.xls">
         </div>
       </div>
@@ -654,18 +774,22 @@ input[type="file"] { display: none; }
     </div>
 
     <div class="stats-bar" id="statsBar">
-      <div class="stats-grid">
+      <div class="stats-grid" style="grid-template-columns: repeat(5,1fr)">
         <div class="stat-item" onclick="filterByView('all')" data-view="all">
           <div class="stat-value" id="statTotal">0</div>
           <div class="stat-label">Всего в прайсе</div>
+        </div>
+        <div class="stat-item" onclick="filterByView('high')" data-view="high">
+          <div class="stat-value" id="statHigh">0</div>
+          <div class="stat-label">Высокая точность</div>
         </div>
         <div class="stat-item" onclick="filterByView('new')" data-view="new">
           <div class="stat-value" id="statNew">0</div>
           <div class="stat-label">Новых синонимов</div>
         </div>
-        <div class="stat-item" onclick="filterByView('high')" data-view="high">
-          <div class="stat-value" id="statHigh">0</div>
-          <div class="stat-label">Высокая точность</div>
+        <div class="stat-item" onclick="filterByView('review')" data-view="review">
+          <div class="stat-value" id="statReview">0</div>
+          <div class="stat-label">На проверке</div>
         </div>
         <div class="stat-item" onclick="filterByView('skipped')" data-view="skipped">
           <div class="stat-value" id="statSkipped">0</div>
@@ -735,87 +859,442 @@ input[type="file"] { display: none; }
 
   <script>
 
+
     let jsonData = {};
     let priceData = [];
     let allMatches = [];
     let matchResults = [];
     let skippedItems = [];
     let highMatches = [];
+    let reviewItems = [];   // НОВОЕ: средние совпадения 40-60%
     let changesMap = new Map();
     let pendingAction = null;
-    let currentView = 'new';
+    let currentView = 'high';
 
     const BARCODE_COLS = ['штрихкод', 'штрих-код', 'barcode', 'ШК', 'шк', 'код', 'ean', 'Штрихкод'];
     const NAME_COLS = ['название', 'name', 'товар', 'наименование', 'продукт', 'Название', 'Наименование'];
     const SYNONYM_COLS = ['синонимы', 'synonyms', 'синоним', 'synonym', 'Синонимы'];
-    const SIMILARITY_THRESHOLD = 60;
 
-    // Все словари брендов, вкусов и т.д. (сокращено для экономии места, но они должны быть полными)
+    const SIMILARITY_THRESHOLD = 42;   // нижняя граница для "На проверке"
+    const REVIEW_THRESHOLD = 60;       // выше — "Новые синонимы"
+    const HIGH_THRESHOLD = 80;         // выше — "Высокая точность"
+
+    // ===== РАСШИРЕННЫЕ СЛОВАРИ =====
     const BRAND_SYNONYMS = {
-      'nescafe': ['нескафе', 'nescafe', 'neskafe', 'нескафэ'],
-      'jacobs': ['якобс', 'jacobs', 'jacobz', 'jakobs'],
-      'orbit': ['орбит', 'orbit', 'арбит'],
-      'dirol': ['дирол', 'dirol', 'диролл'],
-      'snickers': ['сникерс', 'snickers', 'сникерз'],
-      'mars': ['марс', 'mars'],
-      'twix': ['твикс', 'twix'],
-      'milka': ['милка', 'milka'],
-      'kitkat': ['кит-кат', 'киткат', 'kitkat'],
-      'oreo': ['орео', 'oreo'],
-      // ... (полный список из предыдущей версии)
+      'nescafe':    ['нескафе','nescafe','neskafe','нескафэ'],
+      'jacobs':     ['якобс','jacobs','jacobz','jakobs','якобс'],
+      'orbit':      ['орбит','orbit','арбит'],
+      'dirol':      ['дирол','dirol','диролл'],
+      'snickers':   ['сникерс','snickers','сникерз'],
+      'mars':       ['марс','mars'],
+      'twix':       ['твикс','twix'],
+      'milka':      ['милка','milka'],
+      'kitkat':     ['кит-кат','киткат','kitkat','kit kat','kit-kat'],
+      'oreo':       ['орео','oreo'],
+      'bounty':     ['баунти','bounty'],
+      'raffaello':  ['рафаэлло','raffaello','рафаэлo'],
+      'ferrero':    ['ферреро','ferrero'],
+      'ritter':     ['риттер','ritter'],
+      'nestle':     ['нестле','nestle','нестлé'],
+      'lipton':     ['липтон','lipton'],
+      'greenfield': ['гринфилд','greenfield'],
+      'richard':    ['ричард','richard'],
+      'ahmad':      ['ахмад','ahmad'],
+      'pringles':   ['принглс','pringles'],
+      'lays':       ['лейс','lays','lay\'s'],
+      'cheetos':    ['читос','cheetos'],
+      'doritos':    ['доритос','doritos'],
+      'lay':        ['лей','lay'],
+      'haribo':     ['харибо','haribo'],
+      'fazer':      ['фацер','fazer'],
+      'alpen':      ['альпен','alpen'],
+      'alpengold':  ['альпенголд','alpen gold','alpengold','alpengold'],
+      'kinder':     ['киндер','kinder'],
+      'trolli':     ['тролли','trolli'],
+      'wrigley':    ['ригли','wrigley'],
+      'dirol':      ['дирол','dirol'],
+      'extra':      ['экстра','extra'],
+      'mentos':     ['ментос','mentos'],
+      'tic-tac':    ['тик так','tictac','tic tac','tik tak'],
+      'halls':      ['холлс','halls','хoллс'],
+      'werther':    ['вертер','werther'],
+      'roshen':     ['рошен','roshen'],
+      'svetoch':    ['светоч','svetoch'],
+      'rot front':  ['рот фронт','rot front','ротфронт'],
+      'babaevsky':  ['бабаевский','babaevsky'],
+      'kremlevsky': ['кремлевский','kremlevsky'],
+      'toblerone':  ['тоблерон','toblerone'],
+      'lindt':      ['линдт','lindt'],
+      'godiva':     ['годива','godiva'],
+      'perugina':   ['перуджина','perugina'],
     };
 
     const FLAVOR_SYNONYMS = {
-      'chicken': ['курица', 'куриный', 'chicken'],
-      'beef': ['говядина', 'говяжий', 'beef'],
-      'vanilla': ['ваниль', 'vanilla', 'ванильный'],
-      'chocolate': ['шоколад', 'chocolate', 'шоколадный'],
-      'mint': ['мята', 'mint', 'мятный'],
-      // ... (полный список)
+      'chicken':      ['курица','куриный','курин','chicken','chiken'],
+      'beef':         ['говядина','говяжий','beef','говяд'],
+      'vanilla':      ['ваниль','vanilla','ванильный','ваниль','vanila'],
+      'chocolate':    ['шоколад','chocolate','шоколадный','choco','chokolate'],
+      'mint':         ['мята','mint','мятный','мяты'],
+      'strawberry':   ['клубника','клубничный','strawberry','strawbery'],
+      'raspberry':    ['малина','малиновый','raspberry'],
+      'blueberry':    ['черника','черничный','blueberry'],
+      'cherry':       ['вишня','вишневый','cherry','вишня'],
+      'lemon':        ['лимон','лимонный','lemon','лимон'],
+      'orange':       ['апельсин','апельсиновый','orange','апельс'],
+      'peach':        ['персик','персиковый','peach'],
+      'mango':        ['манго','mango'],
+      'caramel':      ['карамель','карамельный','caramel','karamel'],
+      'hazelnut':     ['орех','ореховый','фундук','hazelnut'],
+      'almond':       ['миндаль','миндальный','almond'],
+      'cream':        ['сливочный','cream','сливки','крем'],
+      'mocha':        ['мокко','мока','mocha'],
+      'espresso':     ['эспрессо','espresso'],
+      'cappuccino':   ['капучино','cappuccino','каппучино'],
+      'latte':        ['латте','latte'],
+      'americano':    ['американо','americano'],
+      'menthol':      ['ментол','mentol','menthol','ментол'],
+      'eucalyptus':   ['эвкалипт','eucalyptus'],
+      'watermelon':   ['арбуз','watermelon'],
+      'apple':        ['яблоко','яблочный','apple'],
+      'grape':        ['виноград','виноградный','grape'],
+      'pineapple':    ['ананас','ананасовый','pineapple'],
+      'coconut':      ['кокос','кокосовый','coconut'],
+      'cinnamon':     ['корица','cinamon','cinnamon'],
+      'ginger':       ['имбирь','имбирный','ginger'],
+      'honey':        ['мёд','мед','honey'],
     };
 
-    const PACKAGING_TYPES = {
-      'стб': ['ст/б', 'с/б', 'стб', 'стекло'],
-      'му': ['м/у', 'металл', 'мет'],
-      'жб': ['ж/б', 'жб', 'жестяная'],
-      // ... (полный список)
+    const PACKAGING_NORM = {
+      'стб':'стб','ст/б':'стб','с/б':'стб','стекло':'стб','стеклянная':'стб',
+      'му':'му','м/у':'му','металл':'му','металлическая':'му',
+      'жб':'жб','ж/б':'жб','жестяная':'жб','жестяная банка':'жб',
+      'пэт':'пэт','пет':'пэт','пластик':'пэт','пластиковая':'пэт',
+      'тб':'тб','т/б':'тб','тетра':'тб','тетрапак':'тб',
+      'доу пак':'доупак','доупак':'доупак','дой-пак':'доупак','дойпак':'доупак',
+      'кг':'кг','г':'г','гр':'г','мл':'мл','л':'л',
     };
 
     const IGNORE_PATTERNS = [
-      /\([^)]+\)/g,
+      /\([^)]*\)/g,
       /\d+х\d+/g,
       /!!!.*?!!!/g,
       /\bакция\b/gi,
-      /\bnew\b/gi
+      /\bnew\b/gi,
     ];
 
-    const PRODUCT_TYPES = [
-      'кофе', 'coffee', 'чай', 'tea', 'шоколад', 'chocolate', 
-      'жвачка', 'конфеты', 'батончик', 'печенье'
-    ];
-
+    // Индексы для быстрого поиска
     const SYNONYM_TO_BASE = {};
-    for (const [base, synonyms] of Object.entries(BRAND_SYNONYMS)) {
-      for (const syn of synonyms) {
-        SYNONYM_TO_BASE[syn.toLowerCase()] = base;
-      }
-    }
+    for (const [base, syns] of Object.entries(BRAND_SYNONYMS))
+      for (const s of syns) SYNONYM_TO_BASE[s.toLowerCase()] = base;
 
     const FLAVOR_TO_BASE = {};
-    for (const [base, synonyms] of Object.entries(FLAVOR_SYNONYMS)) {
-      for (const syn of synonyms) {
-        FLAVOR_TO_BASE[syn.toLowerCase()] = base;
-      }
+    for (const [base, syns] of Object.entries(FLAVOR_SYNONYMS))
+      for (const s of syns) FLAVOR_TO_BASE[s.toLowerCase()] = base;
+
+    // ===== ТРАНСЛИТЕРАЦИЯ (RU ↔ EN) =====
+    const RU_TO_EN = {
+      'а':'a','б':'b','в':'v','г':'g','д':'d','е':'e','ё':'e','ж':'zh','з':'z',
+      'и':'i','й':'j','к':'k','л':'l','м':'m','н':'n','о':'o','п':'p','р':'r',
+      'с':'s','т':'t','у':'u','ф':'f','х':'h','ц':'ts','ч':'ch','ш':'sh','щ':'sch',
+      'ъ':'','ы':'y','ь':'','э':'e','ю':'yu','я':'ya'
+    };
+    const EN_TO_RU_APPROX = {
+      'a':'а','b':'б','c':'с','d':'д','e':'е','f':'ф','g':'г','h':'х','i':'и',
+      'j':'й','k':'к','l':'л','m':'м','n':'н','o':'о','p':'п','r':'р','s':'с',
+      't':'т','u':'у','v':'в','w':'в','x':'кс','y':'ы','z':'з'
+    };
+
+    function toTranslit(str) {
+      return str.toLowerCase().split('').map(c => RU_TO_EN[c] !== undefined ? RU_TO_EN[c] : c).join('');
     }
 
-    const PACKAGING_TO_BASE = {};
-    for (const [base, variants] of Object.entries(PACKAGING_TYPES)) {
-      for (const variant of variants) {
-        PACKAGING_TO_BASE[variant.toLowerCase()] = base;
-      }
+    // Стоп-слова которые не несут смысла
+    const STOP_WORDS = new Set([
+      'и','в','с','для','на','от','по','из','к','за','о','об','при','до','под',
+      'или','не','то','это','же','а','но','как','так','все','б','гр','шт','уп','арт','код',
+      'the','a','an','of','for','with','and','in','to','from','by','at',
+    ]);
+
+    function getSignificantTokens(text) {
+      return normalizeText(text).split(' ').filter(w => w.length > 1 && !STOP_WORDS.has(w));
     }
 
-    // ============= УНИВЕРСАЛЬНЫЙ ПАРСЕР БАЗЫ =============
+    // Кросс-языковое сравнение: если одно слово на RU, другое на EN — транслитерируем и сравниваем
+    function crossLangSimilarity(tok1, tok2) {
+      if (tok1 === tok2) return 1;
+      const t1 = toTranslit(tok1);
+      const t2 = toTranslit(tok2);
+      if (t1 === t2) return 1;
+      // Jaro-Winkler на транслитерированных
+      const jw = jaroWinkler(t1, t2);
+      return jw;
+    }
+
+    // Числовые извлечения — все числа в тексте
+    function extractNumbers(text) {
+      const matches = normalizeText(text).match(/\d+(?:\.\d+)?/g) || [];
+      return matches.map(Number);
+    }
+
+
+    function getTrigrams(str) {
+      const s = '  ' + str + '  ';
+      const trigrams = new Set();
+      for (let i = 0; i < s.length - 2; i++)
+        trigrams.add(s.slice(i, i+3));
+      return trigrams;
+    }
+
+    function trigramSimilarity(a, b) {
+      if (!a || !b) return 0;
+      const ta = getTrigrams(a);
+      const tb = getTrigrams(b);
+      let common = 0;
+      for (const t of ta) if (tb.has(t)) common++;
+      return (2 * common) / (ta.size + tb.size);
+    }
+
+    // ===== JARO-WINKLER =====
+    function jaroWinkler(s1, s2) {
+      if (s1 === s2) return 1;
+      const len1 = s1.length, len2 = s2.length;
+      if (!len1 || !len2) return 0;
+      const matchDist = Math.max(Math.floor(Math.max(len1, len2) / 2) - 1, 0);
+      const s1Matches = new Array(len1).fill(false);
+      const s2Matches = new Array(len2).fill(false);
+      let matches = 0, transpositions = 0;
+      for (let i = 0; i < len1; i++) {
+        const start = Math.max(0, i - matchDist);
+        const end = Math.min(i + matchDist + 1, len2);
+        for (let j = start; j < end; j++) {
+          if (s2Matches[j] || s1[i] !== s2[j]) continue;
+          s1Matches[i] = s2Matches[j] = true;
+          matches++;
+          break;
+        }
+      }
+      if (!matches) return 0;
+      let k = 0;
+      for (let i = 0; i < len1; i++) {
+        if (!s1Matches[i]) continue;
+        while (!s2Matches[k]) k++;
+        if (s1[i] !== s2[k]) transpositions++;
+        k++;
+      }
+      const jaro = (matches/len1 + matches/len2 + (matches-transpositions/2)/matches) / 3;
+      let prefix = 0;
+      for (let i = 0; i < Math.min(4, len1, len2); i++) {
+        if (s1[i] === s2[i]) prefix++; else break;
+      }
+      return jaro + prefix * 0.1 * (1 - jaro);
+    }
+
+    // ===== НОРМАЛИЗАЦИЯ =====
+    function cleanText(text) {
+      let cleaned = String(text || '');
+      for (const p of IGNORE_PATTERNS) cleaned = cleaned.replace(p, ' ');
+      return cleaned.trim();
+    }
+
+    function normalizeText(text) {
+      return cleanText(text)
+        .toLowerCase()
+        .replace(/ё/g, 'е')
+        .replace(/[^а-яa-z0-9.,]/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+    }
+
+    // Извлечь вес/объём с нормализацией единиц
+    function extractWeight(text) {
+      const raw = String(text).toLowerCase().replace(/,/g, '.');
+      // Паттерны: 100г, 1.5кг, 200мл, 1л, 0.5 л, 500 г и т.д.
+      const m = raw.match(/(\d+(?:\.\d+)?)\s*(кг|гр|г|мл|л)\b/);
+      if (!m) return null;
+      let val = parseFloat(m[1]);
+      let unit = m[2];
+      // Нормализация к граммам/миллилитрам
+      if (unit === 'кг') { val *= 1000; unit = 'г'; }
+      if (unit === 'гр') unit = 'г';
+      if (unit === 'л') { val *= 1000; unit = 'мл'; }
+      return { value: val, unit };
+    }
+
+    function extractBrand(text) {
+      const norm = normalizeText(text);
+      for (const word of norm.split(' ')) {
+        if (SYNONYM_TO_BASE[word]) return SYNONYM_TO_BASE[word];
+      }
+      // Попробовать двухсловные комбинации
+      const words = norm.split(' ');
+      for (let i = 0; i < words.length - 1; i++) {
+        const two = words[i] + ' ' + words[i+1];
+        if (SYNONYM_TO_BASE[two]) return SYNONYM_TO_BASE[two];
+      }
+      return null;
+    }
+
+    function extractFlavors(text) {
+      const norm = normalizeText(text);
+      const result = new Set();
+      for (const word of norm.split(' ')) {
+        if (FLAVOR_TO_BASE[word]) result.add(FLAVOR_TO_BASE[word]);
+      }
+      return result;
+    }
+
+    function extractPackaging(text) {
+      const norm = normalizeText(text);
+      for (const [variant, base] of Object.entries(PACKAGING_NORM)) {
+        if (norm.includes(variant)) return base;
+      }
+      return null;
+    }
+
+    // ===== ГЛАВНАЯ ФУНКЦИЯ СРАВНЕНИЯ =====
+    function calculateSimilarity(text1, text2) {
+      const norm1 = normalizeText(text1);
+      const norm2 = normalizeText(text2);
+
+      let score = 0;
+      const details = [];
+      const matchedTokens = new Set();
+      const tags = [];
+
+      // 1. Бренд (0 или 30)
+      const brand1 = extractBrand(text1);
+      const brand2 = extractBrand(text2);
+      const brandMatch = brand1 && brand2 && brand1 === brand2;
+      if (brandMatch) {
+        score += 30;
+        tags.push('🏷️ Бренд');
+        details.push({ component: '🏷️ Бренд', score: 30, matched: true });
+        matchedTokens.add(brand1);
+      } else {
+        details.push({ component: '🏷️ Бренд', score: 0, matched: false });
+      }
+
+      // 2. Вес — СТРОГАЯ ПРОВЕРКА
+      const w1 = extractWeight(text1);
+      const w2 = extractWeight(text2);
+      let weightPenalty = false;
+      if (w1 && w2) {
+        if (w1.unit === w2.unit && Math.abs(w1.value - w2.value) < 1) {
+          score += 25;
+          tags.push('⚖️ Вес=');
+          details.push({ component: '⚖️ Вес', score: 25, matched: true });
+          matchedTokens.add(w1.value + w1.unit);
+        } else {
+          // Разный вес — сильный штраф, скорее всего другой товар
+          score -= 40;
+          weightPenalty = true;
+          tags.push('⚠️ Разный вес');
+          details.push({ component: '⚖️ Вес', score: -40, matched: false, penalty: true });
+        }
+      } else if (!w1 && !w2) {
+        details.push({ component: '⚖️ Вес', score: 0, matched: false });
+      } else {
+        details.push({ component: '⚖️ Вес', score: 0, matched: false });
+      }
+
+      // 3. Вкусы (пересечение)
+      const f1 = extractFlavors(text1);
+      const f2 = extractFlavors(text2);
+      const commonFlavors = [...f1].filter(f => f2.has(f));
+      const missingFlavors = [...f1].filter(f => !f2.has(f)).concat([...f2].filter(f => !f1.has(f)));
+      if (commonFlavors.length > 0 && missingFlavors.length === 0) {
+        score += 15;
+        tags.push('🍓 Вкус=');
+        details.push({ component: '🍓 Вкус', score: 15, matched: true });
+        commonFlavors.forEach(f => matchedTokens.add(f));
+      } else if (f1.size > 0 && f2.size > 0 && missingFlavors.length > 0) {
+        score -= 10;
+        details.push({ component: '🍓 Вкус', score: -10, matched: false, penalty: true });
+        tags.push('⚠️ Разный вкус');
+      } else {
+        details.push({ component: '🍓 Вкус', score: 0, matched: false });
+      }
+
+      // 4. Тип упаковки
+      const pkg1 = extractPackaging(text1);
+      const pkg2 = extractPackaging(text2);
+      if (pkg1 && pkg2) {
+        if (pkg1 === pkg2) {
+          score += 10;
+          tags.push('📦 Упак=');
+          details.push({ component: '📦 Упаковка', score: 10, matched: true });
+        } else {
+          score -= 15;
+          tags.push('⚠️ Разная уп.');
+          details.push({ component: '📦 Упаковка', score: -15, matched: false, penalty: true });
+        }
+      }
+
+      // 5. Триграммная схожесть всего названия
+      const triSim = trigramSimilarity(norm1, norm2);
+      const triScore = Math.round(triSim * 30);
+      if (triScore > 0) {
+        score += triScore;
+        details.push({ component: `📊 Триграммы`, score: triScore, matched: triScore > 5 });
+      }
+
+      // 6. Токены (без стоп-слов)
+      const tokens1 = getSignificantTokens(text1);
+      const tokens2 = getSignificantTokens(text2);
+      const tset1 = new Set(tokens1);
+      const tset2 = new Set(tokens2);
+      const exactCommon = tokens1.filter(w => tset2.has(w) && w.length > 2);
+      if (exactCommon.length > 0) {
+        const tokScore = Math.min(15, exactCommon.length * 4);
+        score += tokScore;
+        details.push({ component: '📝 Слова', score: tokScore, matched: true });
+        exactCommon.forEach(w => matchedTokens.add(w));
+      }
+
+      // 7. Кросс-языковое + Jaro-Winkler на токенах
+      let crossScore = 0;
+      for (const t1 of tokens1) {
+        for (const t2 of tokens2) {
+          if (t1 === t2 || t1.length < 3 || t2.length < 3) continue;
+          const sim = crossLangSimilarity(t1, t2);
+          if (sim > 0.85) {
+            const bonus = Math.round((sim - 0.85) * 80);
+            crossScore = Math.max(crossScore, bonus);
+            matchedTokens.add(t2);
+            matchedTokens.add(t1);
+          }
+        }
+      }
+      if (crossScore > 0) {
+        score += crossScore;
+        details.push({ component: '🌐 Кросс-язык', score: crossScore, matched: true });
+      }
+
+      // 8. Числа (кроме веса) — совпадение дополнительных чисел
+      const nums1 = extractNumbers(text1).filter(n => n !== (w1 ? w1.value : null) && n > 0);
+      const nums2 = extractNumbers(text2).filter(n => n !== (w2 ? w2.value : null) && n > 0);
+      const commonNums = nums1.filter(n => nums2.includes(n));
+      if (commonNums.length > 0) {
+        score += 8;
+        details.push({ component: '🔢 Числа', score: 8, matched: true });
+      }
+
+      // Итоговый процент — нормализуем к 0-100
+      const maxPossible = 118;
+      const finalPercent = Math.max(0, Math.min(100, Math.round(score / maxPossible * 100)));
+
+      return {
+        score: finalPercent,
+        rawScore: score,
+        details,
+        tags,
+        matchedTokens,
+        weightPenalty,
+        weights: { w1, w2 }
+      };
+    }
+
+
     document.getElementById('jsonInput').addEventListener('change', handleBaseUpload);
     document.getElementById('priceInput').addEventListener('change', handlePriceUpload);
 
@@ -946,175 +1425,20 @@ input[type="file"] { display: none; }
     function findColumn(data, synonyms) {
       if (!data || data.length === 0) return null;
       const columns = Object.keys(data[0]);
-      return columns.find(col => 
-        synonyms.some(syn => col.toLowerCase().includes(syn.toLowerCase()))
-      ) || columns[0];
+      return columns.find(col => synonyms.some(syn => col.toLowerCase().includes(syn.toLowerCase()))) || columns[0];
     }
 
-    function cleanText(text) {
-      let cleaned = String(text || '');
-      for (const pattern of IGNORE_PATTERNS) {
-        cleaned = cleaned.replace(pattern, ' ');
-      }
-      return cleaned.trim();
-    }
-
-    function normalizeText(text) {
-      text = cleanText(text);
-      return text
-        .toLowerCase()
-        .replace(/[^а-яa-z0-9]/g, ' ')
-        .replace(/\s+/g, ' ')
-        .trim();
-    }
-
-    function extractWeight(text) {
-      const weightMatch = text.match(/(\d+(?:[.,]\d+)?)\s*([гкмл])/i);
-      if (weightMatch) {
-        const value = parseFloat(weightMatch[1].replace(',', '.'));
-        const unit = weightMatch[2].toLowerCase();
-        return { value, unit };
-      }
-      return null;
-    }
-
-    function compareWeights(weight1, weight2) {
-      if (!weight1 || !weight2) return 0;
-      if (weight1.unit !== weight2.unit) return 0;
-      if (weight1.value === weight2.value) return 20;
-      const diff = Math.abs(weight1.value - weight2.value);
-      const percent = (diff / weight1.value) * 100;
-      if (percent <= 10) return 10;
-      return 0;
-    }
-
-    function extractBrand(text) {
-      const normalized = normalizeText(text);
-      const words = normalized.split(' ');
-      for (const word of words) {
-        if (SYNONYM_TO_BASE[word]) {
-          return SYNONYM_TO_BASE[word];
-        }
-      }
-      return null;
-    }
-
-    function extractProductType(text) {
-      const normalized = normalizeText(text);
-      for (const type of PRODUCT_TYPES) {
-        if (normalized.includes(type)) {
-          return type;
-        }
-      }
-      return null;
-    }
-
-    function extractFlavor(text) {
-      const normalized = normalizeText(text);
-      const words = normalized.split(' ');
-      for (const word of words) {
-        if (FLAVOR_TO_BASE[word]) {
-          return FLAVOR_TO_BASE[word];
-        }
-      }
-      return null;
-    }
-
-    function calculateEnhancedSimilarity(text1, text2) {
-      let totalScore = 0;
-      const maxScore = 110;
-      const details = [];
-      const matchedTokens = new Set();
-
-      const brand1 = extractBrand(text1);
-      const brand2 = extractBrand(text2);
-      if (brand1 && brand2 && brand1 === brand2) {
-        totalScore += 30;
-        details.push({ component: '🏷️ Бренд', score: 30, matched: true });
-        matchedTokens.add(brand1);
-      } else {
-        details.push({ component: '🏷️ Бренд', score: 0, matched: false });
-      }
-
-      const type1 = extractProductType(text1);
-      const type2 = extractProductType(text2);
-      if (type1 && type2 && type1 === type2) {
-        totalScore += 25;
-        details.push({ component: '📦 Тип товара', score: 25, matched: true });
-        matchedTokens.add(type1);
-      } else {
-        details.push({ component: '📦 Тип товара', score: 0, matched: false });
-      }
-
-      const weight1 = extractWeight(text1);
-      const weight2 = extractWeight(text2);
-      const weightScore = compareWeights(weight1, weight2);
-      if (weightScore > 0) {
-        totalScore += weightScore;
-        details.push({ 
-          component: '⚖️ Вес', 
-          score: weightScore, 
-          matched: true,
-          exact: weightScore === 20
-        });
-        if (weight1) matchedTokens.add(weight1.value + weight1.unit);
-      } else {
-        details.push({ component: '⚖️ Вес', score: 0, matched: false });
-      }
-
-      const flavor1 = extractFlavor(text1);
-      const flavor2 = extractFlavor(text2);
-      if (flavor1 && flavor2 && flavor1 === flavor2) {
-        totalScore += 15;
-        details.push({ component: '🍓 Вкус', score: 15, matched: true });
-        matchedTokens.add(flavor1);
-      } else {
-        details.push({ component: '🍓 Вкус', score: 0, matched: false });
-      }
-
-      const normalized1 = normalizeText(text1).split(' ');
-      const normalized2 = normalizeText(text2).split(' ');
-      const cleaned1 = normalized1.filter(w => !PACKAGING_TO_BASE[w]);
-      const cleaned2 = normalized2.filter(w => !PACKAGING_TO_BASE[w]);
-      const set1 = new Set(cleaned1);
-      const set2 = new Set(cleaned2);
-      const commonWords = [...set1].filter(w => set2.has(w) && w.length > 2);
-
-      if (commonWords.length > 0) {
-        const wordScore = Math.min(10, commonWords.length * 3);
-        totalScore += wordScore;
-        details.push({ component: '📝 Общие слова', score: wordScore, matched: true });
-        commonWords.forEach(w => matchedTokens.add(w));
-      } else {
-        details.push({ component: '📝 Общие слова', score: 0, matched: false });
-      }
-
-      const finalPercent = Math.round((totalScore / maxScore) * 100);
-
-      const tags = [];
-      if (brand1 === brand2) tags.push('🏷️');
-      if (type1 === type2) tags.push('📦');
-      if (weightScore === 20) tags.push('⚖️');
-      if (weightScore === 10) tags.push('⚖️~');
-      if (flavor1 === flavor2) tags.push('🍓');
-      if (commonWords.length > 0) tags.push(`📝${commonWords.length}`);
-
-      return {
-        score: finalPercent,
-        totalScore: totalScore,
-        maxScore: maxScore,
-        details: details,
-        tags: tags,
-        matchedTokens: matchedTokens
-      };
-    }
+    // (cleanText, normalizeText, extractWeight, extractBrand, extractFlavors, extractPackaging
+    //  calculateSimilarity — всё определено выше, в новом блоке)
 
     function highlightMatches(text, matchedTokens) {
       if (!matchedTokens || matchedTokens.size === 0) return text;
       let result = text;
       for (const token of matchedTokens) {
-        const regex = new RegExp(`(${token})`, 'gi');
-        result = result.replace(regex, '<span class="highlight">$1</span>');
+        try {
+          const regex = new RegExp(`(${token.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')})`, 'gi');
+          result = result.replace(regex, '<span class="highlight">$1</span>');
+        } catch(e) {}
       }
       return result;
     }
@@ -1138,10 +1462,11 @@ input[type="file"] { display: none; }
     }
 
     async function performEnhancedMatching() {
-      showProgress('Умный матчинг v2.2...');
+      showProgress('Умный матчинг V3.0 — тригрммный поиск...');
       matchResults = [];
       skippedItems = [];
       highMatches = [];
+      reviewItems = [];
       allMatches = [];
 
       const barcodeCol = findColumn(priceData, BARCODE_COLS);
@@ -1163,29 +1488,16 @@ input[type="file"] { display: none; }
         let synonyms = [];
 
         if (Array.isArray(value)) {
-          if (value.length > 0 && value[0]) {
-            name = String(value[0]).trim();
-          }
-          // Поддержка двух форматов JSON:
-          // 1. sinonims_with_nav: ["name", "syn1", "syn2", ...] — каждый синоним отдельным элементом
-          // 2. CSV/XLSX: ["name", "syn1; syn2; syn3"] — синонимы строкой через ";"
+          if (value.length > 0 && value[0]) name = String(value[0]).trim();
           if (value.length > 2) {
             synonyms = value.slice(1).map(s => String(s).trim()).filter(s => s && isBarcode(s));
           } else if (value.length === 2 && value[1]) {
             const synonymsStr = String(value[1]).trim();
-            if (synonymsStr) {
-              synonyms = synonymsStr.split(';').map(s => s.trim()).filter(s => s && isBarcode(s));
-            }
+            if (synonymsStr) synonyms = synonymsStr.split(';').map(s => s.trim()).filter(s => s && isBarcode(s));
           }
         }
 
-        jsonMap.set(key, {
-          hasMainBarcode: keyIsBarcode,
-          mainBarcode: mainBarcode,
-          name: name,
-          synonyms: synonyms
-        });
-
+        jsonMap.set(key, { hasMainBarcode: keyIsBarcode, mainBarcode, name, synonyms });
         if (keyIsBarcode) allBarcodes.add(key);
         synonyms.forEach(syn => allBarcodes.add(syn));
       }
@@ -1197,79 +1509,84 @@ input[type="file"] { display: none; }
 
         if (!barcode || !name) continue;
 
-        let bestMatch = null;
-        let bestSimilarity = 0;
-        let bestResult = null;
+        // Собираем ТОП-3 кандидата
+        const candidates = [];
 
         for (const [key, data] of jsonMap) {
-          const result = calculateEnhancedSimilarity(name, data.name);
-          if (result.score >= SIMILARITY_THRESHOLD && result.score > bestSimilarity) {
-            bestSimilarity = result.score;
-            bestMatch = { key: key, ...data };
-            bestResult = result;
+          const result = calculateSimilarity(name, data.name);
+          if (result.score >= SIMILARITY_THRESHOLD) {
+            candidates.push({
+              key, ...data,
+              similarity: result.score,
+              matchResult: result
+            });
           }
         }
 
+        // Сортируем по score, берём топ-3
+        candidates.sort((a, b) => b.similarity - a.similarity);
+        const top3 = candidates.slice(0, 3);
+        const bestMatch = top3[0];
+
         if (bestMatch) {
           const isDuplicate = allBarcodes.has(barcode);
+          const sim = bestMatch.similarity;
 
           if (isDuplicate) {
             skippedItems.push({
-              barcode: barcode,
-              name: name,
+              barcode, name,
               reason: 'duplicate',
               matchName: bestMatch.name,
               mainBarcode: bestMatch.mainBarcode,
-              similarity: bestSimilarity,
-              matchResult: bestResult
+              similarity: sim,
+              matchResult: bestMatch.matchResult,
+              candidates: top3
             });
           } else {
             const matchData = {
-              barcode: barcode,
-              name: name,
+              barcode, name,
               mainBarcode: bestMatch.mainBarcode,
               mainName: bestMatch.name,
               synonyms: bestMatch.synonyms,
               hasMainBarcode: bestMatch.hasMainBarcode,
               jsonKey: bestMatch.key,
-              similarity: bestSimilarity,
-              matchResult: bestResult,
-              status: bestSimilarity >= 80 ? 'high' : 'medium'
+              similarity: sim,
+              matchResult: bestMatch.matchResult,
+              candidates: top3,
+              weightPenalty: bestMatch.matchResult.weightPenalty
             };
 
-            matchResults.push(matchData);
-
-            if (bestSimilarity >= 80) {
-              highMatches.push(matchData);
+            if (sim >= REVIEW_THRESHOLD) {
+              matchResults.push(matchData);
+              if (sim >= HIGH_THRESHOLD) highMatches.push(matchData);
+            } else {
+              reviewItems.push(matchData);
             }
           }
 
-          allMatches.push({
-            barcode: barcode,
-            name: name,
-            status: isDuplicate ? 'skipped' : 'new',
-            similarity: bestSimilarity,
-            matchData: bestMatch,
-            matchResult: bestResult
-          });
+          allMatches.push({ barcode, name, status: isDuplicate ? 'skipped' : 'new', similarity: sim, matchResult: bestMatch.matchResult });
         }
 
-        updateProgress((i / priceData.length) * 100);
-        await new Promise(resolve => setTimeout(resolve, 0));
+        if (i % 10 === 0) {
+          updateProgress((i / priceData.length) * 100);
+          await new Promise(resolve => setTimeout(resolve, 0));
+        }
       }
 
       matchResults.sort((a, b) => b.similarity - a.similarity);
+      reviewItems.sort((a, b) => b.similarity - a.similarity);
 
       document.getElementById('statTotal').textContent = priceData.length;
       document.getElementById('statNew').textContent = matchResults.length;
       document.getElementById('statHigh').textContent = highMatches.length;
+      document.getElementById('statReview').textContent = reviewItems.length;
       document.getElementById('statSkipped').textContent = skippedItems.length;
 
       document.getElementById('statsBar').classList.add('show');
       document.getElementById('resultsPanel').classList.add('show');
 
       hideProgress();
-      filterByView('new');
+      filterByView('high');
     }
 
     function filterByView(view) {
@@ -1277,26 +1594,28 @@ input[type="file"] { display: none; }
 
       document.querySelectorAll('.stat-item').forEach(item => {
         item.classList.remove('active');
-        if (item.dataset.view === view) {
-          item.classList.add('active');
-        }
+        if (item.dataset.view === view) item.classList.add('active');
       });
 
-      if (view === 'new') {
-        document.getElementById('resultsTitle').textContent = '📊 Новые синонимы';
-        document.getElementById('resultsSubtitle').textContent = `${matchResults.length} товаров готовы к добавлению`;
-        renderResults(matchResults, 'new');
-      } else if (view === 'high') {
+      if (view === 'high') {
         document.getElementById('resultsTitle').textContent = '⭐ Высокая точность (≥80%)';
-        document.getElementById('resultsSubtitle').textContent = `${highMatches.length} товаров с высокой схожестью`;
-        renderResults(highMatches, 'high');
+        document.getElementById('resultsSubtitle').textContent = `${highMatches.length} товаров — скорее всего это синонимы`;
+        renderResults(highMatches, 'match');
+      } else if (view === 'new') {
+        document.getElementById('resultsTitle').textContent = '📊 Новые синонимы (60–79%)';
+        document.getElementById('resultsSubtitle').textContent = `${matchResults.filter(r=>r.similarity<HIGH_THRESHOLD).length} товаров с хорошим совпадением`;
+        renderResults(matchResults.filter(r=>r.similarity<HIGH_THRESHOLD), 'match');
+      } else if (view === 'review') {
+        document.getElementById('resultsTitle').textContent = '🔍 На проверке (42–59%) — сравните сами';
+        document.getElementById('resultsSubtitle').textContent = `${reviewItems.length} товаров — система предлагает кандидатов, вы решаете`;
+        renderResults(reviewItems, 'review');
       } else if (view === 'skipped') {
         document.getElementById('resultsTitle').textContent = '⏭️ Пропущенные (дубли)';
         document.getElementById('resultsSubtitle').textContent = `${skippedItems.length} товаров уже есть в базе`;
         renderResults(skippedItems, 'skipped');
       } else {
-        document.getElementById('resultsTitle').textContent = '📋 Все товары';
-        document.getElementById('resultsSubtitle').textContent = `${allMatches.length} товаров с похожими названиями`;
+        document.getElementById('resultsTitle').textContent = '📋 Все найденные совпадения';
+        document.getElementById('resultsSubtitle').textContent = `${allMatches.length} товаров`;
         renderResults(allMatches, 'all');
       }
     }
@@ -1322,138 +1641,140 @@ input[type="file"] { display: none; }
       let html = '';
 
       items.forEach((item, index) => {
+        const result = item;
+        const sim = result.similarity || 0;
+        const mr = result.matchResult || {};
+
+        // Определяем класс карточки
+        let cardClass, simClass, actionLabel, actionClass;
         if (type === 'skipped') {
-          const result = item;
-          const matchTags = result.matchResult && result.matchResult.tags ? 
-            result.matchResult.tags.map(m => `<span class="match-tag">${m}</span>`).join('') : '';
-
-          const highlightedPriceName = result.matchResult ? 
-            highlightMatches(result.name, result.matchResult.matchedTokens) : 
-            result.name;
-
-          const highlightedJsonName = result.matchResult ? 
-            highlightMatches(result.matchName, result.matchResult.matchedTokens) : 
-            result.matchName;
-
-          let scoreDetails = '';
-          if (result.matchResult && result.matchResult.details) {
-            const matched = result.matchResult.details.filter(d => d.matched);
-            scoreDetails = matched.map(d => 
-              `<span class="score-item">
-                <span class="score-icon">${d.component.split(' ')[0]}</span>
-                <span>+${d.score}</span>
-              </span>`
-            ).join('');
-          }
-
-          html += `
-            <div class="result-card skipped-card">
-              <div class="card-header">
-                <div class="card-left">
-                  <span class="similarity-badge similarity-skip">${result.similarity}%</span>
-                  <div class="match-tags">${matchTags}</div>
-                </div>
-                <span class="action-badge action-skip">⏭️ Дубль</span>
-              </div>
-
-              <div class="comparison-vertical">
-                <div class="name-box price-box">
-                  <div class="name-label">
-                    <span>📄</span>
-                    <span>Новый товар</span>
-                  </div>
-                  <div class="name-text">${highlightedPriceName}</div>
-                  <div class="barcode-info">ШК: ${result.barcode}</div>
-                </div>
-
-                <div class="name-box json-box">
-                  <div class="name-label">
-                    <span>📦</span>
-                    <span>В базе</span>
-                  </div>
-                  <div class="name-text">${highlightedJsonName}</div>
-                  <div class="barcode-info">ШК: ${result.mainBarcode || '[Нет ШК]'}</div>
-                </div>
-              </div>
-
-              ${scoreDetails ? `<div class="score-details">${scoreDetails}</div>` : ''}
-            </div>
-          `;
+          cardClass = 'skipped-card'; simClass = 'skip'; actionLabel = '⏭️ Дубль'; actionClass = 'action-skip';
+        } else if (type === 'review') {
+          cardClass = 'review-card'; simClass = 'review'; actionLabel = '🔍 На проверке'; actionClass = 'action-review';
         } else {
-          const result = item;
-          const simClass = result.similarity >= 80 ? 'high' : 'medium';
-          const cardClass = result.similarity >= 80 ? 'high-match' : 'medium-match';
-          const actionLabel = result.hasMainBarcode ? '➕ Синоним' : '⭐ Главный';
-          const actionClass = result.hasMainBarcode ? 'action-synonym' : 'action-main';
+          cardClass = sim >= 80 ? 'high-match' : 'medium-match';
+          simClass = sim >= 80 ? 'high' : 'medium';
+          actionLabel = result.hasMainBarcode ? '➕ Синоним' : '⭐ Главный';
+          actionClass = result.hasMainBarcode ? 'action-synonym' : 'action-main';
+        }
 
-          const matchTags = result.matchResult && result.matchResult.tags ? 
-            result.matchResult.tags.map(m => `<span class="match-tag">${m}</span>`).join('') : '';
+        const matchTags = (mr.tags || []).map(t => `<span class="match-tag">${t}</span>`).join('');
+        const mainName = type === 'skipped' ? (result.matchName || '') : (result.mainName || '');
+        const highlightedPriceName = highlightMatches(result.name, mr.matchedTokens);
+        const highlightedJsonName = highlightMatches(mainName, mr.matchedTokens);
 
-          const highlightedPriceName = result.matchResult ? 
-            highlightMatches(result.name, result.matchResult.matchedTokens) : 
-            result.name;
+        // Детали компонентов
+        let scoreDetails = '';
+        if (mr.details) {
+          scoreDetails = mr.details.filter(d => d.score !== 0).map(d =>
+            `<span class="score-item" style="${d.penalty ? 'background:#fff0f0' : ''}">
+              <span class="score-icon">${d.component.split(' ')[0]}</span>
+              <span style="color:${d.penalty ? '#ff3b30' : '#34c759'}">${d.score > 0 ? '+' : ''}${d.score}</span>
+            </span>`
+          ).join('');
+        }
 
-          const highlightedJsonName = result.matchResult ? 
-            highlightMatches(result.mainName, result.matchResult.matchedTokens) : 
-            result.mainName;
+        // Предупреждение о разном весе
+        const weightWarn = result.weightPenalty || mr.weightPenalty ?
+          `<div class="weight-warning">⚠️ Разный вес — вероятно разные товары!</div>` : '';
 
-          let scoreDetails = '';
-          if (result.matchResult && result.matchResult.details) {
-            const matched = result.matchResult.details.filter(d => d.matched);
-            scoreDetails = matched.map(d => 
-              `<span class="score-item">
-                <span class="score-icon">${d.component.split(' ')[0]}</span>
-                <span>+${d.score}</span>
-              </span>`
-            ).join('');
-          }
-
-          html += `
-            <div class="result-card ${cardClass}" onclick="showConfirmModal(${index}, '${type}')">
-              <div class="card-header">
-                <div class="card-left">
-                  <span class="similarity-badge similarity-${simClass}">${result.similarity}%</span>
-                  <div class="match-tags">${matchTags}</div>
-                </div>
-                <span class="action-badge ${actionClass}">${actionLabel}</span>
+        // Блок кандидатов (для review и обычных с несколькими кандидатами)
+        let candidatesHtml = '';
+        if (result.candidates && result.candidates.length > 1) {
+          const cands = result.candidates.slice(0, 3).map((c, ci) => {
+            const cSim = c.similarity;
+            const cColor = cSim >= 80 ? '#34c759' : cSim >= 60 ? '#ff9500' : '#af52de';
+            const isMain = ci === 0;
+            return `
+              <div class="candidate-item ${isMain ? 'selected' : ''}" 
+                   onclick="selectCandidate(event, ${index}, ${ci}, '${type}')">
+                <span class="candidate-score" style="background:${cColor}">${cSim}%</span>
+                <span class="candidate-name">${c.name}</span>
+                <span class="candidate-bc">${c.mainBarcode || c.key || ''}</span>
+                ${type !== 'skipped' ? `<button class="select-candidate-btn" onclick="selectAndConfirm(event,${index},${ci},'${type}')">Выбрать</button>` : ''}
               </div>
-
-              <div class="comparison-vertical">
-                <div class="name-box price-box">
-                  <div class="name-label">
-                    <span>📄</span>
-                    <span>Новый товар</span>
-                  </div>
-                  <div class="name-text">${highlightedPriceName}</div>
-                  <div class="barcode-info">ШК: ${result.barcode}</div>
-                </div>
-
-                <div class="name-box json-box">
-                  <div class="name-label">
-                    <span>📦</span>
-                    <span>В базе</span>
-                  </div>
-                  <div class="name-text">${highlightedJsonName}</div>
-                  <div class="barcode-info">ШК: ${result.hasMainBarcode ? result.mainBarcode : '[Нет ШК]'}</div>
-                </div>
-              </div>
-
-              ${scoreDetails ? `<div class="score-details">${scoreDetails}</div>` : ''}
+            `;
+          }).join('');
+          candidatesHtml = `
+            <div class="candidates-section">
+              <div class="candidates-title">🔎 Кандидаты для сравнения (${result.candidates.length} найдено)</div>
+              ${cands}
             </div>
           `;
         }
+
+        const clickable = type !== 'skipped' ? `onclick="showConfirmModal(${index}, '${type}')"` : '';
+
+        html += `
+          <div class="result-card ${cardClass}" ${clickable}>
+            <div class="card-header">
+              <div class="card-left">
+                <span class="similarity-badge similarity-${simClass}">${sim}%</span>
+                <div class="match-tags">${matchTags}</div>
+              </div>
+              <span class="action-badge ${actionClass}">${actionLabel}</span>
+            </div>
+
+            <div class="comparison-vertical">
+              <div class="name-box price-box">
+                <div class="name-label"><span>📄</span><span>Новый товар</span></div>
+                <div class="name-text">${highlightedPriceName}</div>
+                <div class="barcode-info">ШК: ${result.barcode}</div>
+              </div>
+              <div class="name-box json-box">
+                <div class="name-label"><span>📦</span><span>В базе (лучшее совпадение)</span></div>
+                <div class="name-text">${highlightedJsonName}</div>
+                <div class="barcode-info">ШК: ${result.mainBarcode || result.hasMainBarcode ? (result.mainBarcode || result.key) : '[Нет ШК]'}</div>
+              </div>
+            </div>
+
+            ${weightWarn}
+            ${scoreDetails ? `<div class="score-details">${scoreDetails}</div>` : ''}
+            ${candidatesHtml}
+          </div>
+        `;
       });
 
       container.innerHTML = html;
     }
 
+    // Выбрать другого кандидата как активного
+    function selectCandidate(e, itemIndex, candidateIndex, type) {
+      e.stopPropagation();
+      const list = type === 'high' ? highMatches : type === 'new' ? matchResults.filter(r=>r.similarity<HIGH_THRESHOLD) : reviewItems;
+      if (!list[itemIndex] || !list[itemIndex].candidates) return;
+
+      // Переставляем кандидата на первое место
+      const cands = list[itemIndex].candidates;
+      const chosen = cands.splice(candidateIndex, 1)[0];
+      cands.unshift(chosen);
+      list[itemIndex].mainBarcode = chosen.mainBarcode;
+      list[itemIndex].mainName = chosen.name;
+      list[itemIndex].hasMainBarcode = chosen.hasMainBarcode;
+      list[itemIndex].jsonKey = chosen.key;
+      list[itemIndex].similarity = chosen.similarity;
+      list[itemIndex].matchResult = chosen.matchResult;
+      list[itemIndex].weightPenalty = chosen.matchResult.weightPenalty;
+
+      filterByView(currentView);
+    }
+
+    // Выбрать кандидата и сразу открыть подтверждение
+    function selectAndConfirm(e, itemIndex, candidateIndex, type) {
+      e.stopPropagation();
+      selectCandidate(e, itemIndex, candidateIndex, type);
+      // После selectCandidate список обновляется, candidateIndex 0 теперь выбран
+      showConfirmModal(itemIndex, type);
+    }
+
     function showConfirmModal(index, type) {
-      let result;
-      if (type === 'high') {
-        result = highMatches[index];
-      } else {
-        result = matchResults[index];
-      }
+      let list;
+      if (type === 'high') list = highMatches;
+      else if (type === 'review') list = reviewItems;
+      else list = matchResults.filter(r=>r.similarity<HIGH_THRESHOLD);
+
+      const result = list[index];
+      if (!result) return;
 
       pendingAction = result;
 
@@ -1507,11 +1828,14 @@ input[type="file"] { display: none; }
         similarity: pendingAction.similarity
       });
 
-      matchResults = matchResults.filter(r => r.barcode !== pendingAction.barcode);
-      highMatches = highMatches.filter(r => r.barcode !== pendingAction.barcode);
+      const bc = pendingAction.barcode;
+      matchResults = matchResults.filter(r => r.barcode !== bc);
+      highMatches = highMatches.filter(r => r.barcode !== bc);
+      reviewItems = reviewItems.filter(r => r.barcode !== bc);
 
       document.getElementById('statNew').textContent = matchResults.length;
       document.getElementById('statHigh').textContent = highMatches.length;
+      document.getElementById('statReview').textContent = reviewItems.length;
       document.getElementById('exportTopCount').textContent = changesMap.size;
       document.getElementById('exportTopBtn').classList.add('show');
 
