@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>🎯 Smart Matcher V3.0 — Умный поиск по названиям!</title>
+  <title>🎯 Smart Matcher V4.1 — Умный поиск по названиям</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
   <style>
@@ -23,10 +23,10 @@ body {
   box-shadow: 0 8px 32px rgba(0,0,0,0.1);
 }
 
-h1 { 
-  font-size: 26px; 
-  font-weight: 700; 
-  color: #1c1c1e; 
+h1 {
+  font-size: 26px;
+  font-weight: 700;
+  color: #1c1c1e;
   margin-bottom: 8px;
   display: flex;
   align-items: center;
@@ -34,7 +34,7 @@ h1 {
 }
 
 .version-badge {
-  background: linear-gradient(135deg, #34c759 0%, #30d158 100%);
+  background: linear-gradient(135deg, #5856d6 0%, #667eea 100%);
   color: white;
   padding: 4px 12px;
   border-radius: 12px;
@@ -42,9 +42,25 @@ h1 {
   font-weight: 700;
 }
 
-.subtitle { 
-  color: #8e8e93; 
-  font-size: 13px; 
+.algo-badges {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+.algo-badge {
+  background: #f2f2f7;
+  color: #3c3c43;
+  padding: 3px 9px;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.subtitle {
+  color: #8e8e93;
+  font-size: 13px;
   line-height: 1.5;
 }
 
@@ -231,6 +247,13 @@ h1 {
   letter-spacing: 0.3px;
 }
 
+.name-norm {
+  font-size: 11px;
+  color: #8e8e93;
+  margin-top: 6px;
+  font-family: monospace;
+}
+
 .barcode-info {
   font-family: 'Courier New', monospace;
   font-size: 12px;
@@ -274,10 +297,8 @@ h1 {
 
 .modal {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
   background: rgba(0,0,0,0.6);
   z-index: 1000;
   display: none;
@@ -314,11 +335,8 @@ h1 {
   font-size: 24px;
   color: #8e8e93;
   cursor: pointer;
-  width: 32px;
-  height: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  width: 32px; height: 32px;
+  display: flex; align-items: center; justify-content: center;
   border-radius: 8px;
   transition: all 0.2s;
 }
@@ -367,7 +385,7 @@ h1 {
   margin-bottom: 8px;
 }
 
-.product-badge { 
+.product-badge {
   font-size: 11px;
   font-weight: 600;
   color: #667eea;
@@ -383,10 +401,10 @@ h1 {
   color: #1c1c1e;
 }
 
-.product-name-compact { 
-  font-size: 16px; 
-  color: #1c1c1e; 
-  line-height: 1.4; 
+.product-name-compact {
+  font-size: 16px;
+  color: #1c1c1e;
+  line-height: 1.4;
   margin-top: 6px;
   font-weight: 700;
   text-transform: uppercase;
@@ -439,12 +457,11 @@ h1 {
 
 .progress-fill {
   height: 100%;
-  background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(90deg, #5856d6 0%, #667eea 100%);
   transition: width 0.3s;
   width: 0%;
 }
 
-/* НОВЫЕ СТИЛИ V3.0 */
 .candidates-section {
   margin-top: 12px;
   border-top: 1px dashed #e5e5ea;
@@ -472,15 +489,8 @@ h1 {
   background: #f2f2f7;
 }
 
-.candidate-item:hover {
-  border-color: #667eea;
-  background: #e8f0ff;
-}
-
-.candidate-item.selected {
-  border-color: #34c759;
-  background: #f0fdf4;
-}
+.candidate-item:hover { border-color: #667eea; background: #e8f0ff; }
+.candidate-item.selected { border-color: #34c759; background: #f0fdf4; }
 
 .candidate-score {
   font-size: 12px;
@@ -512,18 +522,6 @@ h1 {
 .similarity-review { background: #af52de; }
 .action-review { background: #af52de; color: white; }
 
-.diff-indicator {
-  display: inline-block;
-  padding: 2px 7px;
-  border-radius: 6px;
-  font-size: 11px;
-  font-weight: 700;
-  margin-left: 6px;
-}
-
-.diff-weight { background: #ff3b30; color: white; }
-.diff-ok { background: #34c759; color: white; }
-
 .weight-warning {
   display: inline-flex;
   align-items: center;
@@ -553,12 +551,45 @@ h1 {
 
 .select-candidate-btn:hover { background: #5568d3; }
 
-.trigram-score {
-  font-size: 10px;
-  color: #8e8e93;
-  margin-left: 4px;
+/* V4.1 skip reason */
+.skip-reason-box {
+  border-radius: 8px;
+  padding: 8px 12px;
+  margin-bottom: 10px;
+  font-size: 12px;
+  font-weight: 700;
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  gap: 4px;
 }
-
+.skip-reason-box.is-main {
+  background: #e3f2fd;
+  border: 1px solid #90caf9;
+  color: #1565c0;
+}
+.skip-reason-box.is-synonym {
+  background: #f3e5f5;
+  border: 1px solid #ce93d8;
+  color: #7b1fa2;
+}
+.skip-reason-detail {
+  font-size: 11px;
+  font-weight: 400;
+  opacity: 0.85;
+  font-family: monospace;
+  word-break: break-all;
+}
+/* V4.1 rebranding tag */
+.tag-rebrand {
+  background: #fff3e0;
+  color: #bf360c;
+  border: 1px solid #ffb74d;
+  padding: 2px 7px;
+  border-radius: 7px;
+  font-size: 10px;
+  font-weight: 700;
+}
 
 @media (max-width: 768px) {
   .upload-grid { flex-direction: column; }
@@ -566,7 +597,7 @@ h1 {
   .modal-actions { grid-template-columns: 1fr; }
 }
 
-/* ===== NAV — встроен в дизайн ===== */
+/* ===== NAV ===== */
 .global-nav {
   max-width: 1600px;
   margin: 0 auto 16px auto;
@@ -615,19 +646,10 @@ h1 {
   transition: all .15s ease;
 }
 
-.global-nav__link:hover {
-  background: rgba(255,255,255,0.28);
-  color: #fff;
-  transform: translateY(-1px);
-}
+.global-nav__link:hover { background: rgba(255,255,255,0.28); color: #fff; transform: translateY(-1px); }
+.global-nav__link.is-active { color: #667eea; background: #fff; border-color: #fff; }
 
-.global-nav__link.is-active {
-  color: #667eea;
-  background: #fff;
-  border-color: #fff;
-}
-
-/* ===== КОМПАКТНАЯ ЗАГРУЗКА ===== */
+/* ===== UPLOAD ===== */
 .upload-panel {
   background: white;
   border-radius: 16px;
@@ -636,11 +658,7 @@ h1 {
   box-shadow: 0 8px 32px rgba(0,0,0,0.1);
 }
 
-.upload-grid {
-  display: flex;
-  gap: 10px;
-  align-items: stretch;
-}
+.upload-grid { display: flex; gap: 10px; align-items: stretch; }
 
 .upload-box {
   flex: 1;
@@ -661,18 +679,9 @@ h1 {
 .upload-info { flex: 1; min-width: 0; }
 .upload-title { font-size: 13px; font-weight: 700; color: #1c1c1e; margin-bottom: 2px; }
 .upload-desc { font-size: 11px; color: #8e8e93; line-height: 1.3; }
-
 .upload-right { display: flex; flex-direction: column; align-items: flex-end; gap: 5px; flex-shrink: 0; }
-
 .format-badges { display: flex; gap: 4px; }
-.format-badge {
-  background: #e8f0ff;
-  color: #667eea;
-  padding: 2px 6px;
-  border-radius: 6px;
-  font-size: 10px;
-  font-weight: 700;
-}
+.format-badge { background: #e8f0ff; color: #667eea; padding: 2px 6px; border-radius: 6px; font-size: 10px; font-weight: 700; }
 
 .upload-btn {
   background: #667eea;
@@ -690,1247 +699,1435 @@ h1 {
 .upload-status { font-size: 11px; color: #34c759; font-weight: 600; white-space: nowrap; text-align: right; }
 
 input[type="file"] { display: none; }
-
   </style>
 </head>
-<body style="background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);min-height:100vh;padding:16px;">
+<body style="background:linear-gradient(135deg,#5856d6 0%,#667eea 50%,#764ba2 100%);min-height:100vh;padding:16px;">
+
 <header class="global-nav">
   <div class="global-nav__inner">
-    <a class="global-nav__brand" href="https://erofly83-arch.github.io/pricematcher/">
-      🧭 Навигатор
-    </a>
-
+    <a class="global-nav__brand" href="https://erofly83-arch.github.io/pricematcher/">🧭 Навигатор</a>
     <nav class="global-nav__links" aria-label="Навигация по приложениям">
-      <a class="global-nav__link" href="https://erofly83-arch.github.io/synonyms/" data-match="/synonyms/">
-        Редактор JSON
-      </a>
-      <a class="global-nav__link" href="https://erofly83-arch.github.io/pricematcher/" data-match="/pricematcher/">
-        Мониторинг
-      </a>
-      <a class="global-nav__link" href="https://erofly83-arch.github.io/obrezatel/" data-match="/obrezatel/">
-        Обрезатель
-      </a>
-      <a class="global-nav__link" href="https://erofly83-arch.github.io/sininimfinder/" data-match="/sininimfinder/">
-        Поиск синонимов
-      </a>
+      <a class="global-nav__link" href="https://erofly83-arch.github.io/synonyms/" data-match="/synonyms/">Редактор JSON</a>
+      <a class="global-nav__link" href="https://erofly83-arch.github.io/pricematcher/" data-match="/pricematcher/">Мониторинг</a>
+      <a class="global-nav__link" href="https://erofly83-arch.github.io/obrezatel/" data-match="/obrezatel/">Обрезатель</a>
+      <a class="global-nav__link" href="https://erofly83-arch.github.io/sininimfinder/" data-match="/sininimfinder/">Поиск синонимов</a>
     </nav>
   </div>
 </header>
-  <div class="container">
-    <div class="header">
-      <h1>
-        🎯 Smart Matcher 
-        <span class="version-badge">V3.0</span>
-      </h1>
-      <button class="export-top" id="exportTopBtn" onclick="exportJSON()">
-        💾 Сохранить обновлённый JSON <span class="export-count" id="exportTopCount">0</span>
-      </button>
+
+<div class="container">
+  <div class="header">
+    <h1>
+      🎯 Smart Matcher
+      <span class="version-badge">V4.1</span>
+    </h1>
+    <div class="algo-badges">
+      <span class="algo-badge">⚖️ Единицы: 100 GR = 0.1кг = 100г</span>
+      <span class="algo-badge">🔀 Token Set: порядок слов не важен</span>
+      <span class="algo-badge">🔤 Фонетика: нескафе ≈ nescafe</span>
+      <span class="algo-badge">🏷️ 150+ брендов + ребрендинги РФ</span>
+      <span class="algo-badge">📦 20+ типов упаковки</span>
+      <span class="algo-badge">➖ kit-kat = kitkat = kit kat</span>
     </div>
+    <button class="export-top" id="exportTopBtn" onclick="exportJSON()">
+      💾 Сохранить обновлённый JSON <span class="export-count" id="exportTopCount">0</span>
+    </button>
+  </div>
 
-    <div class="upload-panel">
-      <div class="upload-grid">
-        <div class="upload-box" id="jsonBox" onclick="document.getElementById('jsonInput').click()">
-          <div class="upload-icon">📦</div>
-          <div class="upload-info">
-            <div class="upload-title">База синонимов</div>
-            <div class="upload-desc">JSON / CSV / XLSX · Штрихкод | Название | Синонимы</div>
-            <div class="upload-status" id="jsonStatus"></div>
+  <div class="upload-panel">
+    <div class="upload-grid">
+      <div class="upload-box" id="jsonBox" onclick="document.getElementById('jsonInput').click()">
+        <div class="upload-icon">📦</div>
+        <div class="upload-info">
+          <div class="upload-title">База синонимов</div>
+          <div class="upload-desc">JSON / CSV / XLSX · Штрихкод | Название | Синонимы</div>
+          <div class="upload-status" id="jsonStatus"></div>
+        </div>
+        <div class="upload-right">
+          <div class="format-badges">
+            <span class="format-badge">JSON</span>
+            <span class="format-badge">CSV</span>
+            <span class="format-badge">XLSX</span>
           </div>
-          <div class="upload-right">
-            <div class="format-badges">
-              <span class="format-badge">JSON</span>
-              <span class="format-badge">CSV</span>
-              <span class="format-badge">XLSX</span>
-            </div>
-            <button class="upload-btn">📂 Выбрать</button>
-          </div>
-          <input type="file" id="jsonInput" accept=".json,.csv,.xlsx,.xls">
+          <button class="upload-btn">📂 Выбрать</button>
         </div>
-
-        <div class="upload-box" id="priceBox" onclick="document.getElementById('priceInput').click()">
-          <div class="upload-icon">📄</div>
-          <div class="upload-info">
-            <div class="upload-title">Прайс поставщика</div>
-            <div class="upload-desc">CSV / XLSX · Штрихкод | Наименование</div>
-            <div class="upload-status" id="priceStatus"></div>
-          </div>
-          <div class="upload-right">
-            <div class="format-badges">
-              <span class="format-badge">CSV</span>
-              <span class="format-badge">XLSX</span>
-            </div>
-            <button class="upload-btn">📂 Выбрать</button>
-          </div>
-          <input type="file" id="priceInput" accept=".csv,.xlsx,.xls">
-        </div>
-      </div>
-    </div>
-
-    <div class="progress-bar" id="progressBar">
-      <div class="progress-text" id="progressText">Загрузка...</div>
-      <div class="progress-track">
-        <div class="progress-fill" id="progressFill"></div>
-      </div>
-    </div>
-
-    <div class="stats-bar" id="statsBar">
-      <div class="stats-grid" style="grid-template-columns: repeat(5,1fr)">
-        <div class="stat-item" onclick="filterByView('all')" data-view="all">
-          <div class="stat-value" id="statTotal">0</div>
-          <div class="stat-label">Всего в прайсе</div>
-        </div>
-        <div class="stat-item" onclick="filterByView('high')" data-view="high">
-          <div class="stat-value" id="statHigh">0</div>
-          <div class="stat-label">Высокая точность</div>
-        </div>
-        <div class="stat-item" onclick="filterByView('new')" data-view="new">
-          <div class="stat-value" id="statNew">0</div>
-          <div class="stat-label">Новых синонимов</div>
-        </div>
-        <div class="stat-item" onclick="filterByView('review')" data-view="review">
-          <div class="stat-value" id="statReview">0</div>
-          <div class="stat-label">На проверке</div>
-        </div>
-        <div class="stat-item" onclick="filterByView('skipped')" data-view="skipped">
-          <div class="stat-value" id="statSkipped">0</div>
-          <div class="stat-label">Пропущено</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="results-panel" id="resultsPanel">
-      <div class="results-header">
-        <div class="results-title" id="resultsTitle">📊 Найденные новые синонимы</div>
-        <div class="results-subtitle" id="resultsSubtitle"></div>
+        <input type="file" id="jsonInput" accept=".json,.csv,.xlsx,.xls">
       </div>
 
-      <div class="results-list" id="resultsList">
-        <div class="empty-state">
-          <div class="empty-icon">🔍</div>
-          <div style="font-size:18px;font-weight:600;margin-bottom:8px;">Загрузите файлы</div>
-          <div>База (JSON/CSV/XLSX) + прайс поставщика</div>
+      <div class="upload-box" id="priceBox" onclick="document.getElementById('priceInput').click()">
+        <div class="upload-icon">📄</div>
+        <div class="upload-info">
+          <div class="upload-title">Прайс поставщика</div>
+          <div class="upload-desc">CSV / XLSX · Штрихкод | Наименование</div>
+          <div class="upload-status" id="priceStatus"></div>
         </div>
+        <div class="upload-right">
+          <div class="format-badges">
+            <span class="format-badge">CSV</span>
+            <span class="format-badge">XLSX</span>
+          </div>
+          <button class="upload-btn">📂 Выбрать</button>
+        </div>
+        <input type="file" id="priceInput" accept=".csv,.xlsx,.xls">
       </div>
     </div>
   </div>
 
-  <div class="modal" id="confirmModal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <div class="modal-title">🔗 Подтверждение</div>
-        <button class="modal-close" onclick="closeModal()">✕</button>
+  <div class="progress-bar" id="progressBar">
+    <div class="progress-text" id="progressText">Загрузка...</div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+  </div>
+
+  <div class="stats-bar" id="statsBar">
+    <div class="stats-grid" style="grid-template-columns: repeat(5,1fr)">
+      <div class="stat-item" onclick="filterByView('all')" data-view="all">
+        <div class="stat-value" id="statTotal">0</div>
+        <div class="stat-label">Всего в прайсе</div>
       </div>
-
-      <div class="modal-body">
-        <div class="similarity-info-compact">
-          <div class="similarity-percent-compact" id="modalSimilarity">0%</div>
-          <div class="similarity-text-compact">Общая схожесть</div>
-        </div>
-
-        <div class="action-info-compact" id="actionInfoCompact">
-          <span id="actionTextCompact"></span>
-        </div>
-
-        <div class="product-compact">
-          <div class="product-header-compact">
-            <span class="product-badge">📄 НОВЫЙ</span>
-            <div class="product-barcode-compact" id="modalPriceBarcode"></div>
-          </div>
-          <div class="product-name-compact" id="modalPriceName"></div>
-        </div>
-
-        <div style="text-align:center;color:#34c759;font-size:24px;margin:12px 0;">⬇</div>
-
-        <div class="product-compact">
-          <div class="product-header-compact">
-            <span class="product-badge">📦 БАЗА</span>
-            <div class="product-barcode-compact" id="modalMainBarcode"></div>
-          </div>
-          <div class="product-name-compact" id="modalMainName"></div>
-        </div>
+      <div class="stat-item" onclick="filterByView('high')" data-view="high">
+        <div class="stat-value" id="statHigh">0</div>
+        <div class="stat-label">Высокая точность</div>
       </div>
-
-      <div class="modal-actions">
-        <button class="modal-btn cancel" onclick="closeModal()">Отмена</button>
-        <button class="modal-btn confirm" id="confirmBtn" onclick="confirmAction()"></button>
+      <div class="stat-item" onclick="filterByView('new')" data-view="new">
+        <div class="stat-value" id="statNew">0</div>
+        <div class="stat-label">Новых синонимов</div>
+      </div>
+      <div class="stat-item" onclick="filterByView('review')" data-view="review">
+        <div class="stat-value" id="statReview">0</div>
+        <div class="stat-label">На проверке</div>
+      </div>
+      <div class="stat-item" onclick="filterByView('skipped')" data-view="skipped">
+        <div class="stat-value" id="statSkipped">0</div>
+        <div class="stat-label">Пропущено</div>
       </div>
     </div>
   </div>
 
-  <script>
-
-
-    let jsonData = {};
-    let priceData = [];
-    let allMatches = [];
-    let matchResults = [];
-    let skippedItems = [];
-    let highMatches = [];
-    let reviewItems = [];   // НОВОЕ: средние совпадения 40-60%
-    let changesMap = new Map();
-    let pendingAction = null;
-    let currentView = 'high';
-
-    const BARCODE_COLS = ['штрихкод', 'штрих-код', 'barcode', 'ШК', 'шк', 'код', 'ean', 'Штрихкод'];
-    const NAME_COLS = ['название', 'name', 'товар', 'наименование', 'продукт', 'Название', 'Наименование'];
-    const SYNONYM_COLS = ['синонимы', 'synonyms', 'синоним', 'synonym', 'Синонимы'];
-
-    const SIMILARITY_THRESHOLD = 42;   // нижняя граница для "На проверке"
-    const REVIEW_THRESHOLD = 60;       // выше — "Новые синонимы"
-    const HIGH_THRESHOLD = 80;         // выше — "Высокая точность"
-
-    // ===== РАСШИРЕННЫЕ СЛОВАРИ =====
-    const BRAND_SYNONYMS = {
-      'nescafe':    ['нескафе','nescafe','neskafe','нескафэ'],
-      'jacobs':     ['якобс','jacobs','jacobz','jakobs','якобс'],
-      'orbit':      ['орбит','orbit','арбит'],
-      'dirol':      ['дирол','dirol','диролл'],
-      'snickers':   ['сникерс','snickers','сникерз'],
-      'mars':       ['марс','mars'],
-      'twix':       ['твикс','twix'],
-      'milka':      ['милка','milka'],
-      'kitkat':     ['кит-кат','киткат','kitkat','kit kat','kit-kat'],
-      'oreo':       ['орео','oreo'],
-      'bounty':     ['баунти','bounty'],
-      'raffaello':  ['рафаэлло','raffaello','рафаэлo'],
-      'ferrero':    ['ферреро','ferrero'],
-      'ritter':     ['риттер','ritter'],
-      'nestle':     ['нестле','nestle','нестлé'],
-      'lipton':     ['липтон','lipton'],
-      'greenfield': ['гринфилд','greenfield'],
-      'richard':    ['ричард','richard'],
-      'ahmad':      ['ахмад','ahmad'],
-      'pringles':   ['принглс','pringles'],
-      'lays':       ['лейс','lays','lay\'s'],
-      'cheetos':    ['читос','cheetos'],
-      'doritos':    ['доритос','doritos'],
-      'lay':        ['лей','lay'],
-      'haribo':     ['харибо','haribo'],
-      'fazer':      ['фацер','fazer'],
-      'alpen':      ['альпен','alpen'],
-      'alpengold':  ['альпенголд','alpen gold','alpengold','alpengold'],
-      'kinder':     ['киндер','kinder'],
-      'trolli':     ['тролли','trolli'],
-      'wrigley':    ['ригли','wrigley'],
-      'dirol':      ['дирол','dirol'],
-      'extra':      ['экстра','extra'],
-      'mentos':     ['ментос','mentos'],
-      'tic-tac':    ['тик так','tictac','tic tac','tik tak'],
-      'halls':      ['холлс','halls','хoллс'],
-      'werther':    ['вертер','werther'],
-      'roshen':     ['рошен','roshen'],
-      'svetoch':    ['светоч','svetoch'],
-      'rot front':  ['рот фронт','rot front','ротфронт'],
-      'babaevsky':  ['бабаевский','babaevsky'],
-      'kremlevsky': ['кремлевский','kremlevsky'],
-      'toblerone':  ['тоблерон','toblerone'],
-      'lindt':      ['линдт','lindt'],
-      'godiva':     ['годива','godiva'],
-      'perugina':   ['перуджина','perugina'],
-    };
-
-    const FLAVOR_SYNONYMS = {
-      'chicken':      ['курица','куриный','курин','chicken','chiken'],
-      'beef':         ['говядина','говяжий','beef','говяд'],
-      'vanilla':      ['ваниль','vanilla','ванильный','ваниль','vanila'],
-      'chocolate':    ['шоколад','chocolate','шоколадный','choco','chokolate'],
-      'mint':         ['мята','mint','мятный','мяты'],
-      'strawberry':   ['клубника','клубничный','strawberry','strawbery'],
-      'raspberry':    ['малина','малиновый','raspberry'],
-      'blueberry':    ['черника','черничный','blueberry'],
-      'cherry':       ['вишня','вишневый','cherry','вишня'],
-      'lemon':        ['лимон','лимонный','lemon','лимон'],
-      'orange':       ['апельсин','апельсиновый','orange','апельс'],
-      'peach':        ['персик','персиковый','peach'],
-      'mango':        ['манго','mango'],
-      'caramel':      ['карамель','карамельный','caramel','karamel'],
-      'hazelnut':     ['орех','ореховый','фундук','hazelnut'],
-      'almond':       ['миндаль','миндальный','almond'],
-      'cream':        ['сливочный','cream','сливки','крем'],
-      'mocha':        ['мокко','мока','mocha'],
-      'espresso':     ['эспрессо','espresso'],
-      'cappuccino':   ['капучино','cappuccino','каппучино'],
-      'latte':        ['латте','latte'],
-      'americano':    ['американо','americano'],
-      'menthol':      ['ментол','mentol','menthol','ментол'],
-      'eucalyptus':   ['эвкалипт','eucalyptus'],
-      'watermelon':   ['арбуз','watermelon'],
-      'apple':        ['яблоко','яблочный','apple'],
-      'grape':        ['виноград','виноградный','grape'],
-      'pineapple':    ['ананас','ананасовый','pineapple'],
-      'coconut':      ['кокос','кокосовый','coconut'],
-      'cinnamon':     ['корица','cinamon','cinnamon'],
-      'ginger':       ['имбирь','имбирный','ginger'],
-      'honey':        ['мёд','мед','honey'],
-    };
-
-    const PACKAGING_NORM = {
-      'стб':'стб','ст/б':'стб','с/б':'стб','стекло':'стб','стеклянная':'стб',
-      'му':'му','м/у':'му','металл':'му','металлическая':'му',
-      'жб':'жб','ж/б':'жб','жестяная':'жб','жестяная банка':'жб',
-      'пэт':'пэт','пет':'пэт','пластик':'пэт','пластиковая':'пэт',
-      'тб':'тб','т/б':'тб','тетра':'тб','тетрапак':'тб',
-      'доу пак':'доупак','доупак':'доупак','дой-пак':'доупак','дойпак':'доупак',
-      'кг':'кг','г':'г','гр':'г','мл':'мл','л':'л',
-    };
-
-    const IGNORE_PATTERNS = [
-      /\([^)]*\)/g,
-      /\d+х\d+/g,
-      /!!!.*?!!!/g,
-      /\bакция\b/gi,
-      /\bnew\b/gi,
-    ];
-
-    // Индексы для быстрого поиска
-    const SYNONYM_TO_BASE = {};
-    for (const [base, syns] of Object.entries(BRAND_SYNONYMS))
-      for (const s of syns) SYNONYM_TO_BASE[s.toLowerCase()] = base;
-
-    const FLAVOR_TO_BASE = {};
-    for (const [base, syns] of Object.entries(FLAVOR_SYNONYMS))
-      for (const s of syns) FLAVOR_TO_BASE[s.toLowerCase()] = base;
-
-    // ===== ТРАНСЛИТЕРАЦИЯ (RU ↔ EN) =====
-    const RU_TO_EN = {
-      'а':'a','б':'b','в':'v','г':'g','д':'d','е':'e','ё':'e','ж':'zh','з':'z',
-      'и':'i','й':'j','к':'k','л':'l','м':'m','н':'n','о':'o','п':'p','р':'r',
-      'с':'s','т':'t','у':'u','ф':'f','х':'h','ц':'ts','ч':'ch','ш':'sh','щ':'sch',
-      'ъ':'','ы':'y','ь':'','э':'e','ю':'yu','я':'ya'
-    };
-    const EN_TO_RU_APPROX = {
-      'a':'а','b':'б','c':'с','d':'д','e':'е','f':'ф','g':'г','h':'х','i':'и',
-      'j':'й','k':'к','l':'л','m':'м','n':'н','o':'о','p':'п','r':'р','s':'с',
-      't':'т','u':'у','v':'в','w':'в','x':'кс','y':'ы','z':'з'
-    };
-
-    function toTranslit(str) {
-      return str.toLowerCase().split('').map(c => RU_TO_EN[c] !== undefined ? RU_TO_EN[c] : c).join('');
-    }
-
-    // Стоп-слова которые не несут смысла
-    const STOP_WORDS = new Set([
-      'и','в','с','для','на','от','по','из','к','за','о','об','при','до','под',
-      'или','не','то','это','же','а','но','как','так','все','б','гр','шт','уп','арт','код',
-      'the','a','an','of','for','with','and','in','to','from','by','at',
-    ]);
-
-    function getSignificantTokens(text) {
-      return normalizeText(text).split(' ').filter(w => w.length > 1 && !STOP_WORDS.has(w));
-    }
-
-    // Кросс-языковое сравнение: если одно слово на RU, другое на EN — транслитерируем и сравниваем
-    function crossLangSimilarity(tok1, tok2) {
-      if (tok1 === tok2) return 1;
-      const t1 = toTranslit(tok1);
-      const t2 = toTranslit(tok2);
-      if (t1 === t2) return 1;
-      // Jaro-Winkler на транслитерированных
-      const jw = jaroWinkler(t1, t2);
-      return jw;
-    }
-
-    // Числовые извлечения — все числа в тексте
-    function extractNumbers(text) {
-      const matches = normalizeText(text).match(/\d+(?:\.\d+)?/g) || [];
-      return matches.map(Number);
-    }
-
-
-    function getTrigrams(str) {
-      const s = '  ' + str + '  ';
-      const trigrams = new Set();
-      for (let i = 0; i < s.length - 2; i++)
-        trigrams.add(s.slice(i, i+3));
-      return trigrams;
-    }
-
-    function trigramSimilarity(a, b) {
-      if (!a || !b) return 0;
-      const ta = getTrigrams(a);
-      const tb = getTrigrams(b);
-      let common = 0;
-      for (const t of ta) if (tb.has(t)) common++;
-      return (2 * common) / (ta.size + tb.size);
-    }
-
-    // ===== JARO-WINKLER =====
-    function jaroWinkler(s1, s2) {
-      if (s1 === s2) return 1;
-      const len1 = s1.length, len2 = s2.length;
-      if (!len1 || !len2) return 0;
-      const matchDist = Math.max(Math.floor(Math.max(len1, len2) / 2) - 1, 0);
-      const s1Matches = new Array(len1).fill(false);
-      const s2Matches = new Array(len2).fill(false);
-      let matches = 0, transpositions = 0;
-      for (let i = 0; i < len1; i++) {
-        const start = Math.max(0, i - matchDist);
-        const end = Math.min(i + matchDist + 1, len2);
-        for (let j = start; j < end; j++) {
-          if (s2Matches[j] || s1[i] !== s2[j]) continue;
-          s1Matches[i] = s2Matches[j] = true;
-          matches++;
-          break;
-        }
-      }
-      if (!matches) return 0;
-      let k = 0;
-      for (let i = 0; i < len1; i++) {
-        if (!s1Matches[i]) continue;
-        while (!s2Matches[k]) k++;
-        if (s1[i] !== s2[k]) transpositions++;
-        k++;
-      }
-      const jaro = (matches/len1 + matches/len2 + (matches-transpositions/2)/matches) / 3;
-      let prefix = 0;
-      for (let i = 0; i < Math.min(4, len1, len2); i++) {
-        if (s1[i] === s2[i]) prefix++; else break;
-      }
-      return jaro + prefix * 0.1 * (1 - jaro);
-    }
-
-    // ===== НОРМАЛИЗАЦИЯ =====
-    function cleanText(text) {
-      let cleaned = String(text || '');
-      for (const p of IGNORE_PATTERNS) cleaned = cleaned.replace(p, ' ');
-      return cleaned.trim();
-    }
-
-    function normalizeText(text) {
-      return cleanText(text)
-        .toLowerCase()
-        .replace(/ё/g, 'е')
-        .replace(/[^а-яa-z0-9.,]/g, ' ')
-        .replace(/\s+/g, ' ')
-        .trim();
-    }
-
-    // Извлечь вес/объём с нормализацией единиц
-    function extractWeight(text) {
-      const raw = String(text).toLowerCase().replace(/,/g, '.');
-      // Паттерны: 100г, 1.5кг, 200мл, 1л, 0.5 л, 500 г и т.д.
-      const m = raw.match(/(\d+(?:\.\d+)?)\s*(кг|гр|г|мл|л)\b/);
-      if (!m) return null;
-      let val = parseFloat(m[1]);
-      let unit = m[2];
-      // Нормализация к граммам/миллилитрам
-      if (unit === 'кг') { val *= 1000; unit = 'г'; }
-      if (unit === 'гр') unit = 'г';
-      if (unit === 'л') { val *= 1000; unit = 'мл'; }
-      return { value: val, unit };
-    }
-
-    function extractBrand(text) {
-      const norm = normalizeText(text);
-      for (const word of norm.split(' ')) {
-        if (SYNONYM_TO_BASE[word]) return SYNONYM_TO_BASE[word];
-      }
-      // Попробовать двухсловные комбинации
-      const words = norm.split(' ');
-      for (let i = 0; i < words.length - 1; i++) {
-        const two = words[i] + ' ' + words[i+1];
-        if (SYNONYM_TO_BASE[two]) return SYNONYM_TO_BASE[two];
-      }
-      return null;
-    }
-
-    function extractFlavors(text) {
-      const norm = normalizeText(text);
-      const result = new Set();
-      for (const word of norm.split(' ')) {
-        if (FLAVOR_TO_BASE[word]) result.add(FLAVOR_TO_BASE[word]);
-      }
-      return result;
-    }
-
-    function extractPackaging(text) {
-      const norm = normalizeText(text);
-      for (const [variant, base] of Object.entries(PACKAGING_NORM)) {
-        if (norm.includes(variant)) return base;
-      }
-      return null;
-    }
-
-    // ===== ГЛАВНАЯ ФУНКЦИЯ СРАВНЕНИЯ =====
-    function calculateSimilarity(text1, text2) {
-      const norm1 = normalizeText(text1);
-      const norm2 = normalizeText(text2);
-
-      let score = 0;
-      const details = [];
-      const matchedTokens = new Set();
-      const tags = [];
-
-      // 1. Бренд (0 или 30)
-      const brand1 = extractBrand(text1);
-      const brand2 = extractBrand(text2);
-      const brandMatch = brand1 && brand2 && brand1 === brand2;
-      if (brandMatch) {
-        score += 30;
-        tags.push('🏷️ Бренд');
-        details.push({ component: '🏷️ Бренд', score: 30, matched: true });
-        matchedTokens.add(brand1);
-      } else {
-        details.push({ component: '🏷️ Бренд', score: 0, matched: false });
-      }
-
-      // 2. Вес — СТРОГАЯ ПРОВЕРКА
-      const w1 = extractWeight(text1);
-      const w2 = extractWeight(text2);
-      let weightPenalty = false;
-      if (w1 && w2) {
-        if (w1.unit === w2.unit && Math.abs(w1.value - w2.value) < 1) {
-          score += 25;
-          tags.push('⚖️ Вес=');
-          details.push({ component: '⚖️ Вес', score: 25, matched: true });
-          matchedTokens.add(w1.value + w1.unit);
-        } else {
-          // Разный вес — сильный штраф, скорее всего другой товар
-          score -= 40;
-          weightPenalty = true;
-          tags.push('⚠️ Разный вес');
-          details.push({ component: '⚖️ Вес', score: -40, matched: false, penalty: true });
-        }
-      } else if (!w1 && !w2) {
-        details.push({ component: '⚖️ Вес', score: 0, matched: false });
-      } else {
-        details.push({ component: '⚖️ Вес', score: 0, matched: false });
-      }
-
-      // 3. Вкусы (пересечение)
-      const f1 = extractFlavors(text1);
-      const f2 = extractFlavors(text2);
-      const commonFlavors = [...f1].filter(f => f2.has(f));
-      const missingFlavors = [...f1].filter(f => !f2.has(f)).concat([...f2].filter(f => !f1.has(f)));
-      if (commonFlavors.length > 0 && missingFlavors.length === 0) {
-        score += 15;
-        tags.push('🍓 Вкус=');
-        details.push({ component: '🍓 Вкус', score: 15, matched: true });
-        commonFlavors.forEach(f => matchedTokens.add(f));
-      } else if (f1.size > 0 && f2.size > 0 && missingFlavors.length > 0) {
-        score -= 10;
-        details.push({ component: '🍓 Вкус', score: -10, matched: false, penalty: true });
-        tags.push('⚠️ Разный вкус');
-      } else {
-        details.push({ component: '🍓 Вкус', score: 0, matched: false });
-      }
-
-      // 4. Тип упаковки
-      const pkg1 = extractPackaging(text1);
-      const pkg2 = extractPackaging(text2);
-      if (pkg1 && pkg2) {
-        if (pkg1 === pkg2) {
-          score += 10;
-          tags.push('📦 Упак=');
-          details.push({ component: '📦 Упаковка', score: 10, matched: true });
-        } else {
-          score -= 15;
-          tags.push('⚠️ Разная уп.');
-          details.push({ component: '📦 Упаковка', score: -15, matched: false, penalty: true });
-        }
-      }
-
-      // 5. Триграммная схожесть всего названия
-      const triSim = trigramSimilarity(norm1, norm2);
-      const triScore = Math.round(triSim * 30);
-      if (triScore > 0) {
-        score += triScore;
-        details.push({ component: `📊 Триграммы`, score: triScore, matched: triScore > 5 });
-      }
-
-      // 6. Токены (без стоп-слов)
-      const tokens1 = getSignificantTokens(text1);
-      const tokens2 = getSignificantTokens(text2);
-      const tset1 = new Set(tokens1);
-      const tset2 = new Set(tokens2);
-      const exactCommon = tokens1.filter(w => tset2.has(w) && w.length > 2);
-      if (exactCommon.length > 0) {
-        const tokScore = Math.min(15, exactCommon.length * 4);
-        score += tokScore;
-        details.push({ component: '📝 Слова', score: tokScore, matched: true });
-        exactCommon.forEach(w => matchedTokens.add(w));
-      }
-
-      // 7. Кросс-языковое + Jaro-Winkler на токенах
-      let crossScore = 0;
-      for (const t1 of tokens1) {
-        for (const t2 of tokens2) {
-          if (t1 === t2 || t1.length < 3 || t2.length < 3) continue;
-          const sim = crossLangSimilarity(t1, t2);
-          if (sim > 0.85) {
-            const bonus = Math.round((sim - 0.85) * 80);
-            crossScore = Math.max(crossScore, bonus);
-            matchedTokens.add(t2);
-            matchedTokens.add(t1);
-          }
-        }
-      }
-      if (crossScore > 0) {
-        score += crossScore;
-        details.push({ component: '🌐 Кросс-язык', score: crossScore, matched: true });
-      }
-
-      // 8. Числа (кроме веса) — совпадение дополнительных чисел
-      const nums1 = extractNumbers(text1).filter(n => n !== (w1 ? w1.value : null) && n > 0);
-      const nums2 = extractNumbers(text2).filter(n => n !== (w2 ? w2.value : null) && n > 0);
-      const commonNums = nums1.filter(n => nums2.includes(n));
-      if (commonNums.length > 0) {
-        score += 8;
-        details.push({ component: '🔢 Числа', score: 8, matched: true });
-      }
-
-      // Итоговый процент — нормализуем к 0-100
-      const maxPossible = 118;
-      const finalPercent = Math.max(0, Math.min(100, Math.round(score / maxPossible * 100)));
-
-      return {
-        score: finalPercent,
-        rawScore: score,
-        details,
-        tags,
-        matchedTokens,
-        weightPenalty,
-        weights: { w1, w2 }
-      };
-    }
-
-
-    document.getElementById('jsonInput').addEventListener('change', handleBaseUpload);
-    document.getElementById('priceInput').addEventListener('change', handlePriceUpload);
-
-    async function handleBaseUpload(e) {
-      const file = e.target.files[0];
-      if (!file) return;
-
-      try {
-        showProgress('Загрузка базы синонимов...');
-
-        const fileName = file.name.toLowerCase();
-
-        if (fileName.endsWith('.json')) {
-          // JSON формат
-          const text = await file.text();
-          jsonData = JSON.parse(text);
-        } else if (fileName.endsWith('.csv')) {
-          // CSV формат
-          const data = await parseCSV(file);
-          jsonData = convertTableToJSON(data);
-        } else if (fileName.endsWith('.xlsx') || fileName.endsWith('.xls')) {
-          // Excel формат
-          const data = await parseExcel(file);
-          jsonData = convertTableToJSON(data);
-        } else {
-          throw new Error('Неподдерживаемый формат файла');
-        }
-
-        document.getElementById('jsonBox').classList.add('loaded');
-        document.getElementById('jsonStatus').textContent = `✓ ${Object.keys(jsonData).length} записей`;
-
-        hideProgress();
-        checkAndAnalyze();
-      } catch (error) {
-        hideProgress();
-        alert('Ошибка загрузки базы: ' + error.message);
-      }
-    }
-
-    function convertTableToJSON(data) {
-      const result = {};
-
-      if (!data || data.length === 0) {
-        throw new Error('Файл пустой');
-      }
-
-      // Ищем нужные колонки
-      const barcodeCol = findColumn(data, BARCODE_COLS);
-      const nameCol = findColumn(data, NAME_COLS);
-      const synonymCol = findColumn(data, SYNONYM_COLS);
-
-      if (!barcodeCol || !nameCol) {
-        throw new Error('Не найдены обязательные колонки: Штрихкод и Название');
-      }
-
-      for (const row of data) {
-        const barcode = String(row[barcodeCol] || '').trim();
-        const name = String(row[nameCol] || '').trim();
-        const synonyms = synonymCol ? String(row[synonymCol] || '').trim() : '';
-
-        if (barcode && name) {
-          result[barcode] = [name, synonyms];
-        }
-      }
-
-      return result;
-    }
-
-    async function handlePriceUpload(e) {
-      const file = e.target.files[0];
-      if (!file) return;
-
-      try {
-        showProgress('Загрузка прайса...');
-
-        if (file.name.toLowerCase().endsWith('.csv')) {
-          priceData = await parseCSV(file);
-        } else {
-          priceData = await parseExcel(file);
-        }
-
-        document.getElementById('priceBox').classList.add('loaded');
-        document.getElementById('priceStatus').textContent = `✓ ${priceData.length} товаров`;
-
-        hideProgress();
-        checkAndAnalyze();
-      } catch (error) {
-        hideProgress();
-        alert('Ошибка загрузки прайса: ' + error.message);
-      }
-    }
-
-    function parseCSV(file) {
-      return new Promise((resolve, reject) => {
-        Papa.parse(file, {
-          header: true,
-          skipEmptyLines: true,
-          complete: (results) => resolve(results.data),
-          error: (error) => reject(error)
-        });
-      });
-    }
-
-    function parseExcel(file) {
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          try {
-            const data = new Uint8Array(e.target.result);
-            const workbook = XLSX.read(data, { type: 'array' });
-            const sheet = workbook.Sheets[workbook.SheetNames[0]];
-            const jsonData = XLSX.utils.sheet_to_json(sheet);
-            resolve(jsonData);
-          } catch (error) {
-            reject(error);
-          }
-        };
-        reader.readAsArrayBuffer(file);
-      });
-    }
-
-    function checkAndAnalyze() {
-      if (Object.keys(jsonData).length > 0 && priceData.length > 0) {
-        performEnhancedMatching();
-      }
-    }
-
-    function findColumn(data, synonyms) {
-      if (!data || data.length === 0) return null;
-      const columns = Object.keys(data[0]);
-      return columns.find(col => synonyms.some(syn => col.toLowerCase().includes(syn.toLowerCase()))) || columns[0];
-    }
-
-    // (cleanText, normalizeText, extractWeight, extractBrand, extractFlavors, extractPackaging
-    //  calculateSimilarity — всё определено выше, в новом блоке)
-
-    function highlightMatches(text, matchedTokens) {
-      if (!matchedTokens || matchedTokens.size === 0) return text;
-      let result = text;
-      for (const token of matchedTokens) {
-        try {
-          const regex = new RegExp(`(${token.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')})`, 'gi');
-          result = result.replace(regex, '<span class="highlight">$1</span>');
-        } catch(e) {}
-      }
-      return result;
-    }
-
-    function isBarcode(str) {
-      return /^\d{8,14}$/.test(String(str).trim());
-    }
-
-    function showProgress(text) {
-      document.getElementById('progressBar').classList.add('show');
-      document.getElementById('progressText').textContent = text;
-      document.getElementById('progressFill').style.width = '0%';
-    }
-
-    function updateProgress(percent) {
-      document.getElementById('progressFill').style.width = percent + '%';
-    }
-
-    function hideProgress() {
-      document.getElementById('progressBar').classList.remove('show');
-    }
-
-    async function performEnhancedMatching() {
-      showProgress('Умный матчинг V3.0 — тригрммный поиск...');
-      matchResults = [];
-      skippedItems = [];
-      highMatches = [];
-      reviewItems = [];
-      allMatches = [];
-
-      const barcodeCol = findColumn(priceData, BARCODE_COLS);
-      const nameCol = findColumn(priceData, NAME_COLS);
-
-      if (!barcodeCol || !nameCol) {
-        hideProgress();
-        alert('Ошибка: не найдены столбцы "Штрихкод" и "Наименование" в прайсе');
-        return;
-      }
-
-      const jsonMap = new Map();
-      const allBarcodes = new Set();
-
-      for (const [key, value] of Object.entries(jsonData)) {
-        const keyIsBarcode = isBarcode(key);
-        let name = key;
-        let mainBarcode = keyIsBarcode ? key : '';
-        let synonyms = [];
-
-        if (Array.isArray(value)) {
-          if (value.length > 0 && value[0]) name = String(value[0]).trim();
-          if (value.length > 2) {
-            synonyms = value.slice(1).map(s => String(s).trim()).filter(s => s && isBarcode(s));
-          } else if (value.length === 2 && value[1]) {
-            const synonymsStr = String(value[1]).trim();
-            if (synonymsStr) synonyms = synonymsStr.split(';').map(s => s.trim()).filter(s => s && isBarcode(s));
-          }
-        }
-
-        jsonMap.set(key, { hasMainBarcode: keyIsBarcode, mainBarcode, name, synonyms });
-        if (keyIsBarcode) allBarcodes.add(key);
-        synonyms.forEach(syn => allBarcodes.add(syn));
-      }
-
-      for (let i = 0; i < priceData.length; i++) {
-        const row = priceData[i];
-        const barcode = String(row[barcodeCol] || '').trim();
-        const name = String(row[nameCol] || '').trim();
-
-        if (!barcode || !name) continue;
-
-        // Собираем ТОП-3 кандидата
-        const candidates = [];
-
-        for (const [key, data] of jsonMap) {
-          const result = calculateSimilarity(name, data.name);
-          if (result.score >= SIMILARITY_THRESHOLD) {
-            candidates.push({
-              key, ...data,
-              similarity: result.score,
-              matchResult: result
-            });
-          }
-        }
-
-        // Сортируем по score, берём топ-3
-        candidates.sort((a, b) => b.similarity - a.similarity);
-        const top3 = candidates.slice(0, 3);
-        const bestMatch = top3[0];
-
-        if (bestMatch) {
-          const isDuplicate = allBarcodes.has(barcode);
-          const sim = bestMatch.similarity;
-
-          if (isDuplicate) {
-            skippedItems.push({
-              barcode, name,
-              reason: 'duplicate',
-              matchName: bestMatch.name,
-              mainBarcode: bestMatch.mainBarcode,
-              similarity: sim,
-              matchResult: bestMatch.matchResult,
-              candidates: top3
-            });
-          } else {
-            const matchData = {
-              barcode, name,
-              mainBarcode: bestMatch.mainBarcode,
-              mainName: bestMatch.name,
-              synonyms: bestMatch.synonyms,
-              hasMainBarcode: bestMatch.hasMainBarcode,
-              jsonKey: bestMatch.key,
-              similarity: sim,
-              matchResult: bestMatch.matchResult,
-              candidates: top3,
-              weightPenalty: bestMatch.matchResult.weightPenalty
-            };
-
-            if (sim >= REVIEW_THRESHOLD) {
-              matchResults.push(matchData);
-              if (sim >= HIGH_THRESHOLD) highMatches.push(matchData);
-            } else {
-              reviewItems.push(matchData);
-            }
-          }
-
-          allMatches.push({ barcode, name, status: isDuplicate ? 'skipped' : 'new', similarity: sim, matchResult: bestMatch.matchResult });
-        }
-
-        if (i % 10 === 0) {
-          updateProgress((i / priceData.length) * 100);
-          await new Promise(resolve => setTimeout(resolve, 0));
-        }
-      }
-
-      matchResults.sort((a, b) => b.similarity - a.similarity);
-      reviewItems.sort((a, b) => b.similarity - a.similarity);
-
-      document.getElementById('statTotal').textContent = priceData.length;
-      document.getElementById('statNew').textContent = matchResults.length;
-      document.getElementById('statHigh').textContent = highMatches.length;
-      document.getElementById('statReview').textContent = reviewItems.length;
-      document.getElementById('statSkipped').textContent = skippedItems.length;
-
-      document.getElementById('statsBar').classList.add('show');
-      document.getElementById('resultsPanel').classList.add('show');
-
-      hideProgress();
-      filterByView('high');
-    }
-
-    function filterByView(view) {
-      currentView = view;
-
-      document.querySelectorAll('.stat-item').forEach(item => {
-        item.classList.remove('active');
-        if (item.dataset.view === view) item.classList.add('active');
-      });
-
-      if (view === 'high') {
-        document.getElementById('resultsTitle').textContent = '⭐ Высокая точность (≥80%)';
-        document.getElementById('resultsSubtitle').textContent = `${highMatches.length} товаров — скорее всего это синонимы`;
-        renderResults(highMatches, 'match');
-      } else if (view === 'new') {
-        document.getElementById('resultsTitle').textContent = '📊 Новые синонимы (60–79%)';
-        document.getElementById('resultsSubtitle').textContent = `${matchResults.filter(r=>r.similarity<HIGH_THRESHOLD).length} товаров с хорошим совпадением`;
-        renderResults(matchResults.filter(r=>r.similarity<HIGH_THRESHOLD), 'match');
-      } else if (view === 'review') {
-        document.getElementById('resultsTitle').textContent = '🔍 На проверке (42–59%) — сравните сами';
-        document.getElementById('resultsSubtitle').textContent = `${reviewItems.length} товаров — система предлагает кандидатов, вы решаете`;
-        renderResults(reviewItems, 'review');
-      } else if (view === 'skipped') {
-        document.getElementById('resultsTitle').textContent = '⏭️ Пропущенные (дубли)';
-        document.getElementById('resultsSubtitle').textContent = `${skippedItems.length} товаров уже есть в базе`;
-        renderResults(skippedItems, 'skipped');
-      } else {
-        document.getElementById('resultsTitle').textContent = '📋 Все найденные совпадения';
-        document.getElementById('resultsSubtitle').textContent = `${allMatches.length} товаров`;
-        renderResults(allMatches, 'all');
-      }
-    }
-
-    function renderResults(items, type) {
-      const container = document.getElementById('resultsList');
-
-      if (items.length === 0) {
-        let emptyText = 'Нет результатов';
-        if (type === 'new') emptyText = 'Новых синонимов не найдено';
-        if (type === 'skipped') emptyText = 'Нет пропущенных товаров';
-        if (type === 'high') emptyText = 'Нет товаров с высокой схожестью';
-
-        container.innerHTML = `
-          <div class="empty-state">
-            <div class="empty-icon">✓</div>
-            <div style="font-size:18px;font-weight:600;margin-bottom:8px;">${emptyText}</div>
-          </div>
-        `;
-        return;
-      }
-
-      let html = '';
-
-      items.forEach((item, index) => {
-        const result = item;
-        const sim = result.similarity || 0;
-        const mr = result.matchResult || {};
-
-        // Определяем класс карточки
-        let cardClass, simClass, actionLabel, actionClass;
-        if (type === 'skipped') {
-          cardClass = 'skipped-card'; simClass = 'skip'; actionLabel = '⏭️ Дубль'; actionClass = 'action-skip';
-        } else if (type === 'review') {
-          cardClass = 'review-card'; simClass = 'review'; actionLabel = '🔍 На проверке'; actionClass = 'action-review';
-        } else {
-          cardClass = sim >= 80 ? 'high-match' : 'medium-match';
-          simClass = sim >= 80 ? 'high' : 'medium';
-          actionLabel = result.hasMainBarcode ? '➕ Синоним' : '⭐ Главный';
-          actionClass = result.hasMainBarcode ? 'action-synonym' : 'action-main';
-        }
-
-        const matchTags = (mr.tags || []).map(t => `<span class="match-tag">${t}</span>`).join('');
-        const mainName = type === 'skipped' ? (result.matchName || '') : (result.mainName || '');
-        const highlightedPriceName = highlightMatches(result.name, mr.matchedTokens);
-        const highlightedJsonName = highlightMatches(mainName, mr.matchedTokens);
-
-        // Детали компонентов
-        let scoreDetails = '';
-        if (mr.details) {
-          scoreDetails = mr.details.filter(d => d.score !== 0).map(d =>
-            `<span class="score-item" style="${d.penalty ? 'background:#fff0f0' : ''}">
-              <span class="score-icon">${d.component.split(' ')[0]}</span>
-              <span style="color:${d.penalty ? '#ff3b30' : '#34c759'}">${d.score > 0 ? '+' : ''}${d.score}</span>
-            </span>`
-          ).join('');
-        }
-
-        // Предупреждение о разном весе
-        const weightWarn = result.weightPenalty || mr.weightPenalty ?
-          `<div class="weight-warning">⚠️ Разный вес — вероятно разные товары!</div>` : '';
-
-        // Блок кандидатов (для review и обычных с несколькими кандидатами)
-        let candidatesHtml = '';
-        if (result.candidates && result.candidates.length > 1) {
-          const cands = result.candidates.slice(0, 3).map((c, ci) => {
-            const cSim = c.similarity;
-            const cColor = cSim >= 80 ? '#34c759' : cSim >= 60 ? '#ff9500' : '#af52de';
-            const isMain = ci === 0;
-            return `
-              <div class="candidate-item ${isMain ? 'selected' : ''}" 
-                   onclick="selectCandidate(event, ${index}, ${ci}, '${type}')">
-                <span class="candidate-score" style="background:${cColor}">${cSim}%</span>
-                <span class="candidate-name">${c.name}</span>
-                <span class="candidate-bc">${c.mainBarcode || c.key || ''}</span>
-                ${type !== 'skipped' ? `<button class="select-candidate-btn" onclick="selectAndConfirm(event,${index},${ci},'${type}')">Выбрать</button>` : ''}
-              </div>
-            `;
-          }).join('');
-          candidatesHtml = `
-            <div class="candidates-section">
-              <div class="candidates-title">🔎 Кандидаты для сравнения (${result.candidates.length} найдено)</div>
-              ${cands}
-            </div>
-          `;
-        }
-
-        const clickable = type !== 'skipped' ? `onclick="showConfirmModal(${index}, '${type}')"` : '';
-
-        html += `
-          <div class="result-card ${cardClass}" ${clickable}>
-            <div class="card-header">
-              <div class="card-left">
-                <span class="similarity-badge similarity-${simClass}">${sim}%</span>
-                <div class="match-tags">${matchTags}</div>
-              </div>
-              <span class="action-badge ${actionClass}">${actionLabel}</span>
-            </div>
-
-            <div class="comparison-vertical">
-              <div class="name-box price-box">
-                <div class="name-label"><span>📄</span><span>Новый товар</span></div>
-                <div class="name-text">${highlightedPriceName}</div>
-                <div class="barcode-info">ШК: ${result.barcode}</div>
-              </div>
-              <div class="name-box json-box">
-                <div class="name-label"><span>📦</span><span>В базе (лучшее совпадение)</span></div>
-                <div class="name-text">${highlightedJsonName}</div>
-                <div class="barcode-info">ШК: ${result.mainBarcode || result.hasMainBarcode ? (result.mainBarcode || result.key) : '[Нет ШК]'}</div>
-              </div>
-            </div>
-
-            ${weightWarn}
-            ${scoreDetails ? `<div class="score-details">${scoreDetails}</div>` : ''}
-            ${candidatesHtml}
-          </div>
-        `;
-      });
-
-      container.innerHTML = html;
-    }
-
-    // Выбрать другого кандидата как активного
-    function selectCandidate(e, itemIndex, candidateIndex, type) {
-      e.stopPropagation();
-      const list = type === 'high' ? highMatches : type === 'new' ? matchResults.filter(r=>r.similarity<HIGH_THRESHOLD) : reviewItems;
-      if (!list[itemIndex] || !list[itemIndex].candidates) return;
-
-      // Переставляем кандидата на первое место
-      const cands = list[itemIndex].candidates;
-      const chosen = cands.splice(candidateIndex, 1)[0];
-      cands.unshift(chosen);
-      list[itemIndex].mainBarcode = chosen.mainBarcode;
-      list[itemIndex].mainName = chosen.name;
-      list[itemIndex].hasMainBarcode = chosen.hasMainBarcode;
-      list[itemIndex].jsonKey = chosen.key;
-      list[itemIndex].similarity = chosen.similarity;
-      list[itemIndex].matchResult = chosen.matchResult;
-      list[itemIndex].weightPenalty = chosen.matchResult.weightPenalty;
-
-      filterByView(currentView);
-    }
-
-    // Выбрать кандидата и сразу открыть подтверждение
-    function selectAndConfirm(e, itemIndex, candidateIndex, type) {
-      e.stopPropagation();
-      selectCandidate(e, itemIndex, candidateIndex, type);
-      // После selectCandidate список обновляется, candidateIndex 0 теперь выбран
-      showConfirmModal(itemIndex, type);
-    }
-
-    function showConfirmModal(index, type) {
-      let list;
-      if (type === 'high') list = highMatches;
-      else if (type === 'review') list = reviewItems;
-      else list = matchResults.filter(r=>r.similarity<HIGH_THRESHOLD);
-
-      const result = list[index];
-      if (!result) return;
-
-      pendingAction = result;
-
-      document.getElementById('modalSimilarity').textContent = result.similarity + '%';
-      document.getElementById('modalPriceBarcode').textContent = result.barcode;
-      document.getElementById('modalPriceName').textContent = result.name.toUpperCase();
-
-      const modalMainBarcode = document.getElementById('modalMainBarcode');
-      if (result.hasMainBarcode) {
-        modalMainBarcode.textContent = result.mainBarcode;
-      } else {
-        modalMainBarcode.textContent = '[Нет главного ШК]';
-      }
-
-      document.getElementById('modalMainName').textContent = result.mainName.toUpperCase();
-
-      const actionInfoCompact = document.getElementById('actionInfoCompact');
-      const actionTextCompact = document.getElementById('actionTextCompact');
-      const confirmBtn = document.getElementById('confirmBtn');
-
-      if (result.hasMainBarcode) {
-        actionInfoCompact.className = 'action-info-compact';
-        actionTextCompact.textContent = '➕ Штрихкод будет добавлен как синоним к существующему товару';
-        confirmBtn.textContent = '✓ Добавить синоним';
-      } else {
-        actionInfoCompact.className = 'action-info-compact main';
-        actionTextCompact.textContent = '⭐ Штрихкод станет ГЛАВНЫМ для этого товара (у товара сейчас нет главного ШК)';
-        confirmBtn.textContent = '⭐ Сделать главным';
-      }
-
-      document.getElementById('confirmModal').classList.add('show');
-    }
-
-    function closeModal() {
-      document.getElementById('confirmModal').classList.remove('show');
-      pendingAction = null;
-    }
-
-    function confirmAction() {
-      if (!pendingAction) return;
-
-      const action = pendingAction.hasMainBarcode ? 'add_synonym' : 'set_main';
-
-      changesMap.set(pendingAction.barcode, {
-        action: action,
-        mainBarcode: pendingAction.mainBarcode || '',
-        jsonKey: pendingAction.jsonKey || '',
-        newBarcode: pendingAction.barcode,
-        newName: pendingAction.name,
-        mainName: pendingAction.mainName,
-        similarity: pendingAction.similarity
-      });
-
-      const bc = pendingAction.barcode;
-      matchResults = matchResults.filter(r => r.barcode !== bc);
-      highMatches = highMatches.filter(r => r.barcode !== bc);
-      reviewItems = reviewItems.filter(r => r.barcode !== bc);
-
-      document.getElementById('statNew').textContent = matchResults.length;
-      document.getElementById('statHigh').textContent = highMatches.length;
-      document.getElementById('statReview').textContent = reviewItems.length;
-      document.getElementById('exportTopCount').textContent = changesMap.size;
-      document.getElementById('exportTopBtn').classList.add('show');
-
-      closeModal();
-      filterByView(currentView);
-    }
-
-    async function exportJSON() {
-      const updated = JSON.parse(JSON.stringify(jsonData));
-
-      changesMap.forEach((change, barcode) => {
-        if (change.action === 'add_synonym') {
-          // Исправлено: используем jsonKey — реальный ключ записи в jsonData
-          const lookupKey = change.jsonKey || change.mainBarcode;
-          const currentData = updated[lookupKey];
-
-          if (Array.isArray(currentData) && currentData.length >= 1) {
-            const name = currentData[0];
-
-            // Исправлено: читаем ВСЕ существующие синонимы (оба формата)
-            // Формат sinonims_with_nav: ["name","syn1","syn2",...] — элементы массива
-            // Формат CSV/XLSX:          ["name","syn1; syn2;..."] — строка через ";"
-            let synonyms = [];
-            if (currentData.length > 2) {
-              synonyms = currentData.slice(1).map(s => String(s).trim()).filter(Boolean);
-            } else if (currentData.length === 2 && currentData[1]) {
-              synonyms = String(currentData[1]).trim().split(';').map(s => s.trim()).filter(Boolean);
-            }
-
-            // Исправлено: добавляем штрихкод из прайса (barcode = ключ changesMap)
-            if (barcode && !synonyms.includes(barcode)) {
-              synonyms.push(barcode);
-            }
-
-            // Исправлено: сохраняем в формате sinonims_with_nav — ["name", "syn1", "syn2", ...]
-            updated[lookupKey] = [name, ...synonyms];
-          }
-        } else if (change.action === 'set_main') {
-          const oldKey = change.jsonKey;
-          const oldName = change.mainName;
-
-          updated[barcode] = [oldName];
-
-          if (updated[oldKey]) {
-            delete updated[oldKey];
-          }
-        }
-      });
-
-      const json = JSON.stringify(updated, null, 2);
-      const timestamp = new Date().toISOString().slice(0, 10);
-      const fileName = `synonyms_v2.2_${timestamp}.json`;
-
-      // File System Access API — диалог "Сохранить как" с выбором папки
-      if (window.showSaveFilePicker) {
-        try {
-          const fileHandle = await window.showSaveFilePicker({
-            suggestedName: fileName,
-            types: [{ description: 'JSON файл', accept: { 'application/json': ['.json'] } }]
-          });
-          const writable = await fileHandle.createWritable();
-          await writable.write(json);
-          await writable.close();
-          alert(`✅ JSON успешно сохранён!\n\nДобавлено: ${changesMap.size} изменений\nФайл: ${fileHandle.name}`);
-          return;
-        } catch (err) {
-          if (err.name === 'AbortError') return;
-          console.warn('showSaveFilePicker недоступен, используем запасной вариант:', err);
-        }
-      }
-
-      // Запасной вариант для браузеров без File System Access API
-      const blob = new Blob([json], { type: 'application/json' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = fileName;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-      alert(`✅ JSON обновлён!\n\nДобавлено: ${changesMap.size} изменений\nФайл: ${fileName}`);
-    }
-
-    document.getElementById('confirmModal').addEventListener('click', function(e) {
-      if (e.target === this) closeModal();
+  <div class="results-panel" id="resultsPanel">
+    <div class="results-header">
+      <div class="results-title" id="resultsTitle">📊 Найденные новые синонимы</div>
+      <div class="results-subtitle" id="resultsSubtitle"></div>
+    </div>
+    <div class="results-list" id="resultsList">
+      <div class="empty-state">
+        <div class="empty-icon">🔍</div>
+        <div style="font-size:18px;font-weight:600;margin-bottom:8px;">Загрузите файлы</div>
+        <div>База (JSON/CSV/XLSX) + прайс поставщика</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CONFIRM MODAL -->
+<div class="modal" id="confirmModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="modal-title">🔗 Подтверждение</div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="similarity-info-compact">
+        <div class="similarity-percent-compact" id="modalSimilarity">0%</div>
+        <div class="similarity-text-compact">Общая схожесть</div>
+      </div>
+      <div class="action-info-compact" id="actionInfoCompact">
+        <span id="actionTextCompact"></span>
+      </div>
+      <div class="product-compact">
+        <div class="product-header-compact">
+          <span class="product-badge">📄 НОВЫЙ</span>
+          <div class="product-barcode-compact" id="modalPriceBarcode"></div>
+        </div>
+        <div class="product-name-compact" id="modalPriceName"></div>
+      </div>
+      <div style="text-align:center;color:#34c759;font-size:24px;margin:12px 0;">⬇</div>
+      <div class="product-compact">
+        <div class="product-header-compact">
+          <span class="product-badge">📦 БАЗА</span>
+          <div class="product-barcode-compact" id="modalMainBarcode"></div>
+        </div>
+        <div class="product-name-compact" id="modalMainName"></div>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="modal-btn cancel" onclick="closeModal()">Отмена</button>
+      <button class="modal-btn confirm" id="confirmBtn" onclick="confirmAction()"></button>
+    </div>
+  </div>
+</div>
+
+<script>
+// =============================================================================
+// КОНСТАНТЫ И СОСТОЯНИЕ
+// =============================================================================
+let jsonData = {};
+let priceData = [];
+let allMatches = [];
+let matchResults = [];
+let skippedItems = [];
+let highMatches = [];
+let reviewItems = [];
+let changesMap = new Map();
+let pendingAction = null;
+let currentView = 'high';
+
+const BARCODE_COLS = ['штрихкод','штрих-код','barcode','ШК','шк','код','ean','Штрихкод'];
+const NAME_COLS = ['название','name','товар','наименование','продукт','Название','Наименование'];
+const SYNONYM_COLS = ['синонимы','synonyms','синоним','synonym','Синонимы'];
+
+const SIMILARITY_THRESHOLD = 42;
+const REVIEW_THRESHOLD = 60;
+const HIGH_THRESHOLD = 80;
+
+// =============================================================================
+// V4.0: РАСШИРЕННЫЙ СЛОВАРЬ БРЕНДОВ — 150+ позиций
+// Каждый ключ — любой вариант написания → каноническое имя (латиница, lowercase)
+// =============================================================================
+const BRAND_CANONICAL = {
+  // Шоколад / сладости
+  'milka':'milka','милка':'milka',
+  'kitkat':'kitkat','kit kat':'kitkat','kit-kat':'kitkat','кит-кат':'kitkat','киткат':'kitkat',
+  'bounty':'bounty','баунти':'bounty',
+  'snickers':'snickers','сникерс':'snickers','сникерз':'snickers',
+  'twix':'twix','твикс':'twix',
+  'mars':'mars','марс':'mars',
+  'raffaello':'raffaello','рафаэлло':'raffaello','рафаэло':'raffaello','рафаело':'raffaello',
+  'ferrero':'ferrero','ферреро':'ferrero',
+  'rocher':'rocher','рошер':'rocher',
+  'nutella':'nutella','нутелла':'nutella','нутела':'nutella',
+  'kinder':'kinder','киндер':'kinder',
+  'toblerone':'toblerone','тоблерон':'toblerone',
+  'alenka':'alenka','аленка':'alenka','алёнка':'alenka',
+  'babaevsky':'babaevsky','бабаевский':'babaevsky',
+  'roshen':'roshen','рошен':'roshen',
+  'nesquik':'nesquik','несквик':'nesquik',
+  'merci':'merci','мерси':'merci',
+  'ritter':'ritter','ritter sport':'ritter','риттер':'ritter',
+  'lindt':'lindt','линдт':'lindt',
+  'godiva':'godiva','годива':'godiva',
+  'haribo':'haribo','харибо':'haribo',
+  'trolli':'trolli','тролли':'trolli',
+  'werther':'werther','вертер':'werther',
+  'oreo':'oreo','орео':'oreo',
+  'mentos':'mentos','ментос':'mentos',
+  'tic tac':'tictac','tic-tac':'tictac','tictac':'tictac','тик так':'tictac',
+  'alpen gold':'alpengold','alpengold':'alpengold','alpen-gold':'alpengold','альпенголд':'alpengold',
+  'rot front':'rotfront','рот фронт':'rotfront','ротфронт':'rotfront',
+  // Жевательная резинка
+  'orbit':'orbit','орбит':'orbit',
+  'dirol':'dirol','дирол':'dirol',
+  'wrigley':'wrigley','ригли':'wrigley',
+  'extra':'extra','экстра':'extra',
+  'halls':'halls','холлс':'halls',
+  // Чипсы / снеки
+  "lay's":'lays','lays':'lays','лэйс':'lays','лейс':'lays',
+  'cheetos':'cheetos','читос':'cheetos',
+  'pringles':'pringles','принглс':'pringles',
+  'doritos':'doritos','доритос':'doritos',
+  'ruffles':'ruffles','раффлс':'ruffles',
+  'estrella':'estrella',
+  'фрitos':'fritos','fritos':'fritos',
+  // Напитки энергетики
+  'red bull':'redbull','redbull':'redbull','редбулл':'redbull','ред булл':'redbull',
+  'monster':'monster','монстр':'monster',
+  'burn':'burn','бёрн':'burn',
+  'rockstar':'rockstar','рокстар':'rockstar',
+  // Газировка
+  'coca cola':'cocacola','coca-cola':'cocacola','cocacola':'cocacola',
+  'кока кола':'cocacola','кока-кола':'cocacola',
+  'pepsi':'pepsi','пепси':'pepsi',
+  'sprite':'sprite','спрайт':'sprite',
+  'fanta':'fanta','фанта':'fanta',
+  '7up':'7up','7 up':'7up',
+  'mirinda':'mirinda','миринда':'mirinda',
+  'schweppes':'schweppes','швепс':'schweppes',
+  'dr pepper':'drpepper','dr.pepper':'drpepper',
+  // Чай
+  'lipton':'lipton','липтон':'lipton',
+  'nestea':'nestea','нести':'nestea',
+  'greenfield':'greenfield','гринфилд':'greenfield',
+  'richard':'richard','ричард':'richard',
+  'ahmad':'ahmad','ахмад':'ahmad',
+  'tess':'tess','тесс':'tess',
+  'curtis':'curtis','кёртис':'curtis',
+  'dilmah':'dilmah','дилма':'dilmah',
+  // Вода / сок
+  'evian':'evian','эвиан':'evian',
+  'perrier':'perrier','перье':'perrier',
+  'vittel':'vittel','виттель':'vittel',
+  'bonaqua':'bonaqua','бонаква':'bonaqua',
+  'aqua minerale':'aquaminerale','аква минерале':'aquaminerale',
+  'j7':'j7',
+  'добрый':'dobry','dobry':'dobry',
+  'rich':'rich','рич':'rich',
+  'я':'ya',
+  // Кофе
+  'nescafe':'nescafe','nescafé':'nescafe','нескафе':'nescafe','нэскафе':'nescafe',
+  'jacobs':'jacobs','якобс':'jacobs','якобз':'jacobs','якобс':'jacobs',
+  'lavazza':'lavazza','лавацца':'lavazza','лаваза':'lavazza',
+  'illy':'illy','илли':'illy',
+  'tchibo':'tchibo','чибо':'tchibo',
+  'carte noire':'cartenoire','карт нуар':'cartenoire',
+  'maxwell house':'maxwellhouse',
+  'jardin':'jardin','жардин':'jardin',
+  'grandos':'grandos',
+  'ambassador':'ambassador','амбассадор':'ambassador',
+  'davidoff':'davidoff','давыдов':'davidoff',
+  'black card':'blackcard',
+  // Молочка
+  'danone':'danone','данон':'danone','даноне':'danone',
+  'activia':'activia','активиа':'activia','активия':'activia',
+  'actimel':'actimel','актимель':'actimel',
+  'ehrmann':'ehrmann','эрманн':'ehrmann',
+  'hochland':'hochland','хохланд':'hochland',
+  "président":'president','president':'president','президент':'president',
+  'valio':'valio','валио':'valio',
+  'anchor':'anchor','анкор':'anchor',
+  'arla':'arla','арла':'arla',
+  'simple':'simple','симпл':'simple',
+  // Бакалея / соусы
+  'heinz':'heinz','хайнц':'heinz',
+  "kellogg's":'kelloggs','kelloggs':'kelloggs','келлогс':'kelloggs',
+  'nestlé':'nestle','nestle':'nestle','нестле':'nestle',
+  'knorr':'knorr','кнорр':'knorr',
+  'maggi':'maggi','магги':'maggi',
+  'bonduelle':'bonduelle','бондюэль':'bonduelle',
+  "hellmann's":'hellmanns','hellmanns':'hellmanns',
+  'tabasco':'tabasco','табаско':'tabasco',
+  'worcestershire':'worcestershire',
+  'makfa':'makfa','макфа':'makfa',
+  'barilla':'barilla','барила':'barilla','барилла':'barilla',
+  'de cecco':'dececco',
+  // Мюсли / завтраки
+  'fitness':'fitness',
+  'cheerios':'cheerios',
+  'granola':'granola',
+};
+
+// =============================================================================
+// V4.0: ДЕСКРИПТОРЫ — транслит рус → лат (для кросс-скриптовых дескрипторов)
+// =============================================================================
+const DESCRIPTOR_MAP = {
+  'голд':'gold','силвер':'silver','блэк':'black','блек':'black',
+  'вайт':'white','грин':'green','блю':'blue',
+  'классик':'classic','класик':'classic',
+  'ориджинал':'original','ориджнл':'original',
+  'премиум':'premium','ультра':'ultra','про':'pro',
+  'монарх':'monarch',
+  'лайт':'light','лайтс':'lights',
+  'малина':'raspberry','клубника':'strawberry',
+  'ваниль':'vanilla','лимон':'lemon',
+  'арабика':'arabica','робуста':'robusta',
+  'эспрессо':'espresso','капучино':'cappuccino',
+  'молочный':'milk','молоко':'milk',
+  'сливочный':'cream','сливки':'cream',
+  'черный':'black','чёрный':'black',
+  'белый':'white','зеленый':'green','зелёный':'green',
+};
+
+// Строим быстрый lookup: вариант → база (для extractBrand)
+const SYNONYM_TO_BASE = {};
+for (const [variant, base] of Object.entries(BRAND_CANONICAL)) {
+  SYNONYM_TO_BASE[variant.toLowerCase()] = base;
+}
+
+// =============================================================================
+// V4.1: РЕБРЕНДИНГИ В РФ после 2022 + типичные опечатки и сокращения
+// Оба направления → один канон, поэтому алгоритм их отождествит
+// =============================================================================
+const REBRANDING_MAP = {
+  // Nesquik → Хрутка (Nestlé, 2022—2023)
+  'несквик':'nesquik',  'nesquik':'nesquik',  'нэсквик':'nesquik',
+  'хрутка':'nesquik',   'hrutka':'nesquik',
+
+  // Lay's → Захрустим (PepsiCo → ООО «Фриз-Фри», 2023)
+  "lay's":'lays', 'лэйс':'lays', 'лейс':'lays', 'lays':'lays',
+  'захрустим':'lays', 'захрустимка':'lays',
+
+  // Alpen Gold — опечатки и сокращения (Mondelez остаётся)
+  'alpen gold':'alpengold', 'alpengold':'alpengold', 'alpen-gold':'alpengold',
+  'альпенголд':'alpengold', 'альпен голд':'alpengold', 'альпен гольд':'alpengold',
+  'алпен голд':'alpengold', 'алпен гольд':'alpengold', 'алпенголд':'alpengold',
+  'ag':'alpengold',
+
+  // KitKat — опечатки/слитно
+  'kitkat':'kitkat', 'kit kat':'kitkat', 'кит кат':'kitkat', 'киткат':'kitkat',
+  'кит-кат':'kitkat', 'kit-kat':'kitkat', 'кк':'kitkat',
+
+  // Nescafe — опечатки/сокращения
+  'nescafe':'nescafe', 'nescafé':'nescafe', 'нескафе':'nescafe',
+  'нэскафе':'nescafe', 'neskafe':'nescafe', 'нк':'nescafe',
+
+  // Jacobs — опечатки
+  'jacobs':'jacobs', 'якобс':'jacobs', 'якобз':'jacobs', 'джакобс':'jacobs',
+  'jakobs':'jacobs',
+
+  // Простоквашино (молочная линейка Danone под рос. суббрендом)
+  'данон':'danone', 'danone':'danone', 'даноне':'danone',
+  'простоквашино':'danone',
+
+  // Orbit / Dirol продолжают, но часто пишут по-разному
+  'orbit':'orbit', 'орбит':'orbit', 'ырбит':'orbit',
+  'dirol':'dirol', 'дирол':'dirol', 'дироль':'dirol',
+
+  // Red Bull — слитно/раздельно
+  'red bull':'redbull', 'redbull':'redbull', 'ред булл':'redbull',
+  'редбулл':'redbull', 'redbul':'redbull', 'ред бул':'redbull',
+
+  // Raffaello — частые опечатки
+  'raffaello':'raffaello', 'рафаэлло':'raffaello',
+  'рафаэло':'raffaello', 'рафаэль':'raffaello', 'рафаело':'raffaello',
+
+  // Milka
+  'milka':'milka', 'милка':'milka', 'милько':'milka',
+
+  // Bounty
+  'bounty':'bounty', 'баунти':'bounty', 'бaунти':'bounty',
+};
+// Мёрджим в общий lookup брендов
+for (const [k,v] of Object.entries(REBRANDING_MAP))
+  SYNONYM_TO_BASE[k.toLowerCase()] = v;
+
+// =============================================================================
+// V4.0: ВКУСЫ И УПАКОВКА (без изменений)
+// =============================================================================
+const FLAVOR_SYNONYMS = {
+  'chicken':    ['курица','куриный','курин','chicken','chiken'],
+  'beef':       ['говядина','говяжий','beef'],
+  'vanilla':    ['ваниль','vanilla','ванильный','vanila'],
+  'chocolate':  ['шоколад','chocolate','шоколадный','choco','chokolate'],
+  'mint':       ['мята','mint','мятный'],
+  'strawberry': ['клубника','клубничный','strawberry','strawbery'],
+  'raspberry':  ['малина','малиновый','raspberry'],
+  'blueberry':  ['черника','черничный','blueberry'],
+  'cherry':     ['вишня','вишневый','cherry'],
+  'lemon':      ['лимон','лимонный','lemon'],
+  'orange':     ['апельсин','апельсиновый','orange'],
+  'peach':      ['персик','персиковый','peach'],
+  'mango':      ['манго','mango'],
+  'caramel':    ['карамель','карамельный','caramel','karamel'],
+  'hazelnut':   ['орех','ореховый','фундук','hazelnut'],
+  'almond':     ['миндаль','миндальный','almond'],
+  'cream':      ['сливочный','cream','сливки','крем'],
+  'mocha':      ['мокко','мока','mocha'],
+  'espresso':   ['эспрессо','espresso'],
+  'cappuccino': ['капучино','cappuccino','каппучино'],
+  'latte':      ['латте','latte'],
+  'americano':  ['американо','americano'],
+  'menthol':    ['ментол','menthol'],
+  'watermelon': ['арбуз','watermelon'],
+  'apple':      ['яблоко','яблочный','apple'],
+  'grape':      ['виноград','виноградный','grape'],
+  'coconut':    ['кокос','кокосовый','coconut'],
+  'honey':      ['мёд','мед','honey'],
+};
+
+const FLAVOR_TO_BASE = {};
+for (const [base, syns] of Object.entries(FLAVOR_SYNONYMS))
+  for (const s of syns) FLAVOR_TO_BASE[s.toLowerCase()] = base;
+
+// V4.1: PACKAGING — 20+ типов, greedy longest-first
+// Каждая группа: все варианты → единый канон
+const PACKAGING_GROUPS = [
+  { canon:'мягкая', v:['мягкая упаковка','soft pack','soft pouch','мягк уп','мягк.уп','м/у','м.у','м.у.','mu','му','пакет','пакетик','пачка','саше','sachet','pouch','мяг'] },
+  { canon:'стекло', v:['стеклянная бутылка','стеклянная банка','glass bottle','glass jar','стекло','ст/б','с/б','стб','стек','стекл','glass'] },
+  { canon:'жб',     v:['жестяная банка','алюминиевая банка','металлическая банка','aluminum can','tin can','жб','ж/б','ж.б','жесть','алюминий','металл','банка алюм','can','tin','алюм'] },
+  { canon:'пэт',    v:['пластиковая бутылка','пэт бутылка','pet bottle','plastic bottle','пэт','пет','пет.','пластик','пласт','пластиковая','pet','plastic'] },
+  { canon:'тб',     v:['тетра пак','tetra pak','tetra pack','тетра-пак','tetrapak','тетрапак','тб','т/б','т.б','тетра','tetra'] },
+  { canon:'доупак', v:['дой пак','доу пак','doy pack','doy-pack','stand up pouch','доупак','доу-пак','дойпак','дой-пак'] },
+  { canon:'картон', v:['картонная коробка','картонная упаковка','cardboard box','картон','коробка','карт','carton'] },
+  { canon:'ведро',  v:['пластиковое ведро','ведро пластик','ведро','вед','bucket'] },
+  { canon:'туба',   v:['туба','тюба','tube'] },
+  { canon:'спрей',  v:['аэрозоль','спрей','spray','aerosol'] },
+  { canon:'флакон', v:['флакон','флак'] },
+  { canon:'вакуум', v:['вакуум','вак','vacuum'] },
+  { canon:'зип',    v:['зип пакет','zip пакет','zip-lock','зиплок','зипок'] },
+];
+// Flat map: variant→canon, keys sorted longest-first for greedy match
+const PACKAGING_NORM = {};
+for (const { canon, v } of PACKAGING_GROUPS)
+  for (const x of v) PACKAGING_NORM[x] = canon;
+const PACKAGING_KEYS_SORTED = Object.keys(PACKAGING_NORM).sort((a,b) => b.length - a.length);
+
+const IGNORE_PATTERNS = [
+  /\([^)]*\)/g,
+  /\d+х\d+/g,
+  /!!!.*?!!!/g,
+  /\bакция\b/gi,
+  /\bnew\b/gi,
+];
+
+const STOP_WORDS = new Set([
+  'и','в','с','для','на','от','по','из','к','за','о','об','при','до','под',
+  'или','не','то','это','же','а','но','как','так','все','б','шт','уп','арт','код',
+  'the','a','an','of','for','with','and','in','to','from','by','at',
+]);
+
+// =============================================================================
+// V4.0: НОРМАЛИЗАЦИЯ ЕДИНИЦ ИЗМЕРЕНИЯ
+// =============================================================================
+const UNIT_PATTERNS = [
+  { re: /(\d+(?:[.,]\d+)?)\s*кг/gi,                     factor: 1000 },
+  { re: /(\d+(?:[.,]\d+)?)\s*kg/gi,                     factor: 1000 },
+  { re: /(\d+(?:[.,]\d+)?)\s*гр?\.?(?=[^а-яa-z]|$)/gi, factor: 1    },
+  { re: /(\d+(?:[.,]\d+)?)\s*g(?:rs?)?\.?(?=[^a-z]|$)/gi, factor: 1 },
+  { re: /(\d+(?:[.,]\d+)?)\s*мл/gi,                     factor: 1    },
+  { re: /(\d+(?:[.,]\d+)?)\s*ml/gi,                     factor: 1    },
+  { re: /(\d+(?:[.,]\d+)?)\s*л\b/gi,                    factor: 1000 },
+  { re: /(\d+(?:[.,]\d+)?)\s*l(?:it(?:er|re)?s?)?\b/gi, factor: 1000 },
+  { re: /(\d+(?:[.,]\d+)?)\s*oz\b/gi,                   factor: 28.35 },
+  { re: /(\d+(?:[.,]\d+)?)\s*lb\b/gi,                   factor: 453.6 },
+];
+
+function normalizeUnits(text) {
+  let result = text;
+  for (const { re, factor } of UNIT_PATTERNS) {
+    re.lastIndex = 0;
+    result = result.replace(re, (_, num) => {
+      const val = parseFloat(num.replace(',', '.')) * factor;
+      return (val === Math.floor(val) ? Math.floor(val) : val.toFixed(1)) + 'г';
     });
-  </script>
-  <script>
+  }
+  return result;
+}
+
+// =============================================================================
+// V4.0: ФОНЕТИКА — Russian и Latin
+// =============================================================================
+const RU_PHONETIC = [
+  [/\bэ/g, 'е'], [/э/g, 'е'],
+  [/ф/g, 'в'],
+  [/з\b/g, 'с'],
+  [/[тд]с/g, 'ц'],
+  [/дж/g, 'ж'],
+  [/([а-яё])\1+/g, '$1'],
+  [/[ыи]й\b/g, 'и'],
+];
+const LAT_PHONETIC = [
+  [/ph/g, 'f'],
+  [/ck\b/g, 'k'],
+  [/([a-z])\1+/g, '$1'],
+  [/ae/g, 'e'],
+];
+
+function phoneticKey(word) {
+  let t = word.toLowerCase();
+  if (/[а-яё]/.test(t)) {
+    for (const [pat, repl] of RU_PHONETIC) t = t.replace(pat, repl);
+  } else {
+    for (const [pat, repl] of LAT_PHONETIC) t = t.replace(pat, repl);
+  }
+  return t;
+}
+
+// =============================================================================
+// V4.0: КАНОНИЗАЦИЯ БРЕНДОВ
+// =============================================================================
+function canonicalizeBrands(text) {
+  const tokens = text.split(' ');
+  const result = [];
+  let i = 0;
+  while (i < tokens.length) {
+    // Сначала биграмма
+    if (i + 1 < tokens.length) {
+      const bigram = tokens[i] + ' ' + tokens[i + 1];
+      const canon = BRAND_CANONICAL[bigram];
+      if (canon) { result.push(canon); i += 2; continue; }
+    }
+    const canon = BRAND_CANONICAL[tokens[i]];
+    if (canon) {
+      result.push(canon);
+    } else {
+      result.push(DESCRIPTOR_MAP[tokens[i]] || tokens[i]);
+    }
+    i++;
+  }
+  return result.join(' ');
+}
+
+// =============================================================================
+// V4.0: TOKEN SET — сортировка токенов (порядок слов не важен)
+// =============================================================================
+function tokenSort(text) {
+  return text.split(' ').filter(Boolean).sort().join(' ');
+}
+
+// =============================================================================
+// НОРМАЛИЗАЦИЯ ТЕКСТА (v4: с дефисами, единицами, брендами, фонетикой)
+// =============================================================================
+function cleanText(text) {
+  let cleaned = String(text || '');
+  for (const p of IGNORE_PATTERNS) cleaned = cleaned.replace(p, ' ');
+  return cleaned.trim();
+}
+
+/**
+ * Полная нормализация.
+ * @param {string} text
+ * @param {{ phonetic?: boolean, sorted?: boolean }} opts
+ */
+function normalizeText(text, opts = {}) {
+  let t = cleanText(text);
+  // V4: дефисы → пробел (kit-kat → kit kat → после канонизации → kitkat)
+  t = t.replace(/[-–—]/g, ' ');
+  // V4: нормализация единиц
+  t = normalizeUnits(t);
+  t = t.toLowerCase().replace(/ё/g, 'е');
+  // оставляем только буквы, цифры, пробелы
+  t = t.replace(/[^а-яa-z0-9\s]/g, ' ').replace(/\s+/g, ' ').trim();
+  // V4: канонизация брендов
+  t = canonicalizeBrands(t);
+  // V4: опционально фонетика
+  if (opts.phonetic) {
+    t = t.split(' ').map(phoneticKey).join(' ');
+  }
+  // V4: опционально сортировка токенов
+  if (opts.sorted) {
+    t = tokenSort(t);
+  }
+  return t;
+}
+
+// =============================================================================
+// ТРАНСЛИТЕРАЦИЯ (для кросс-языкового сравнения)
+// =============================================================================
+const RU_TO_EN = {
+  'а':'a','б':'b','в':'v','г':'g','д':'d','е':'e','ё':'e','ж':'zh','з':'z',
+  'и':'i','й':'j','к':'k','л':'l','м':'m','н':'n','о':'o','п':'p','р':'r',
+  'с':'s','т':'t','у':'u','ф':'f','х':'h','ц':'ts','ч':'ch','ш':'sh','щ':'sch',
+  'ъ':'','ы':'y','ь':'','э':'e','ю':'yu','я':'ya'
+};
+
+function toTranslit(str) {
+  return str.toLowerCase().split('').map(c => RU_TO_EN[c] !== undefined ? RU_TO_EN[c] : c).join('');
+}
+
+// =============================================================================
+// СТОП-СЛОВА И ТОКЕНЫ
+// =============================================================================
+function getSignificantTokens(text) {
+  return normalizeText(text).split(' ').filter(w => w.length > 1 && !STOP_WORDS.has(w));
+}
+
+function crossLangSimilarity(tok1, tok2) {
+  if (tok1 === tok2) return 1;
+  const t1 = toTranslit(tok1);
+  const t2 = toTranslit(tok2);
+  if (t1 === t2) return 1;
+  return jaroWinkler(t1, t2);
+}
+
+function extractNumbers(text) {
+  const matches = normalizeText(text).match(/\d+(?:\.\d+)?/g) || [];
+  return matches.map(Number);
+}
+
+// =============================================================================
+// АЛГОРИТМЫ СХОЖЕСТИ
+// =============================================================================
+function getTrigrams(str) {
+  const s = '  ' + str + '  ';
+  const trigrams = new Set();
+  for (let i = 0; i < s.length - 2; i++) trigrams.add(s.slice(i, i + 3));
+  return trigrams;
+}
+
+function trigramSimilarity(a, b) {
+  if (!a || !b) return 0;
+  const ta = getTrigrams(a);
+  const tb = getTrigrams(b);
+  let common = 0;
+  for (const t of ta) if (tb.has(t)) common++;
+  return (2 * common) / (ta.size + tb.size);
+}
+
+function jaroWinkler(s1, s2) {
+  if (s1 === s2) return 1;
+  const len1 = s1.length, len2 = s2.length;
+  if (!len1 || !len2) return 0;
+  const matchDist = Math.max(Math.floor(Math.max(len1, len2) / 2) - 1, 0);
+  const s1Matches = new Array(len1).fill(false);
+  const s2Matches = new Array(len2).fill(false);
+  let matches = 0, transpositions = 0;
+  for (let i = 0; i < len1; i++) {
+    const start = Math.max(0, i - matchDist);
+    const end = Math.min(i + matchDist + 1, len2);
+    for (let j = start; j < end; j++) {
+      if (s2Matches[j] || s1[i] !== s2[j]) continue;
+      s1Matches[i] = s2Matches[j] = true;
+      matches++;
+      break;
+    }
+  }
+  if (!matches) return 0;
+  let k = 0;
+  for (let i = 0; i < len1; i++) {
+    if (!s1Matches[i]) continue;
+    while (!s2Matches[k]) k++;
+    if (s1[i] !== s2[k]) transpositions++;
+    k++;
+  }
+  const jaro = (matches / len1 + matches / len2 + (matches - transpositions / 2) / matches) / 3;
+  let prefix = 0;
+  for (let i = 0; i < Math.min(4, len1, len2); i++) {
+    if (s1[i] === s2[i]) prefix++; else break;
+  }
+  return jaro + prefix * 0.1 * (1 - jaro);
+}
+
+// =============================================================================
+// ИЗВЛЕЧЕНИЕ ВЕС / ВКУС / БРЕНД / УПАКОВКА
+// =============================================================================
+function extractWeight(text) {
+  // Используем расширенную нормализацию единиц
+  const normalized = normalizeUnits(String(text).toLowerCase().replace(/,/g, '.'));
+  const m = normalized.match(/(\d+(?:\.\d+)?)\s*г\b/);
+  if (m) return { value: parseFloat(m[1]), unit: 'г' };
+  const m2 = normalized.match(/(\d+(?:\.\d+)?)\s*мл\b/);
+  if (m2) return { value: parseFloat(m2[1]), unit: 'мл' };
+  return null;
+}
+
+function extractBrand(text) {
+  // Check via normalizeText (canonical) AND raw lowercase (catches variants with special chars)
+  for (const norm of [normalizeText(text), String(text||'').toLowerCase().replace(/[-–—]/g,' ').replace(/\s+/g,' ').trim()]) {
+    const words = norm.split(' ').filter(Boolean);
+    // Bigrams first
+    for (let i = 0; i < words.length - 1; i++) {
+      const two = words[i] + ' ' + words[i + 1];
+      if (SYNONYM_TO_BASE[two]) return SYNONYM_TO_BASE[two];
+    }
+    // Single tokens
+    for (const word of words) {
+      if (SYNONYM_TO_BASE[word]) return SYNONYM_TO_BASE[word];
+    }
+  }
+  return null;
+}
+
+function extractFlavors(text) {
+  const norm = normalizeText(text);
+  const result = new Set();
+  for (const word of norm.split(' ')) {
+    if (FLAVOR_TO_BASE[word]) result.add(FLAVOR_TO_BASE[word]);
+  }
+  return result;
+}
+
+function extractPackaging(text) {
+  // V4.1: greedy longest-first match
+  // Check TWO forms: raw-lowercased (preserves / . для ключей типа м/у, ст/б)
+  // и fully-normalised (для многословных типа "мягкая упаковка")
+  const raw  = String(text||'').toLowerCase().replace(/[-–—]/g,' ').replace(/\s+/g,' ').trim();
+  const norm = normalizeText(text);
+  for (const key of PACKAGING_KEYS_SORTED) {
+    if (raw.includes(key) || norm.includes(key)) return PACKAGING_NORM[key];
+  }
+  return null;
+}
+
+// =============================================================================
+// V4.0: ГЛАВНАЯ ФУНКЦИЯ СРАВНЕНИЯ
+//   Использует Token Set Ratio + Phonetic на обоих направлениях
+// =============================================================================
+function calculateSimilarity(text1, text2) {
+  const matchedTokens = new Set();
+  const tags = [];
+  const details = [];
+  let score = 0;
+
+  // --- 1. Бренд (0 или 30) ---
+  const brand1 = extractBrand(text1);
+  const brand2 = extractBrand(text2);
+  const brandMatch = brand1 && brand2 && brand1 === brand2;
+  if (brandMatch) {
+    score += 30;
+    tags.push('🏷️ Бренд');
+    details.push({ component: '🏷️ Бренд', score: 30, matched: true });
+    matchedTokens.add(brand1);
+  } else {
+    details.push({ component: '🏷️ Бренд', score: 0, matched: false });
+  }
+
+  // --- 2. Вес (строгая проверка, нормализован к граммам) ---
+  const w1 = extractWeight(text1);
+  const w2 = extractWeight(text2);
+  let weightPenalty = false;
+  if (w1 && w2) {
+    if (w1.unit === w2.unit && Math.abs(w1.value - w2.value) < 1) {
+      score += 15; // V4.1: снижен (был 25)
+      tags.push('⚖️ Вес=');
+      details.push({ component: '⚖️ Вес', score: 15, matched: true });
+      matchedTokens.add(w1.value + w1.unit);
+    } else {
+      score -= 25; // V4.1: снижен (был -40)
+      weightPenalty = true;
+      tags.push('⚠️ Разный вес');
+      details.push({ component: '⚖️ Вес', score: -25, matched: false, penalty: true });
+    }
+  } else {
+    details.push({ component: '⚖️ Вес', score: 0, matched: false });
+  }
+
+  // --- 3. Вкусы ---
+  const f1 = extractFlavors(text1);
+  const f2 = extractFlavors(text2);
+  const commonFlavors = [...f1].filter(f => f2.has(f));
+  const missingFlavors = [...f1].filter(f => !f2.has(f)).concat([...f2].filter(f => !f1.has(f)));
+  if (commonFlavors.length > 0 && missingFlavors.length === 0) {
+    score += 15;
+    tags.push('🍓 Вкус=');
+    details.push({ component: '🍓 Вкус', score: 15, matched: true });
+    commonFlavors.forEach(f => matchedTokens.add(f));
+  } else if (f1.size > 0 && f2.size > 0 && missingFlavors.length > 0) {
+    score -= 10;
+    tags.push('⚠️ Разный вкус');
+    details.push({ component: '🍓 Вкус', score: -10, matched: false, penalty: true });
+  } else {
+    details.push({ component: '🍓 Вкус', score: 0, matched: false });
+  }
+
+  // --- 4. Упаковка ---
+  const pkg1 = extractPackaging(text1);
+  const pkg2 = extractPackaging(text2);
+  if (pkg1 && pkg2) {
+    if (pkg1 === pkg2) {
+      score += 10;
+      tags.push('📦 Упак=');
+      details.push({ component: '📦 Упаковка', score: 10, matched: true });
+    } else {
+      score -= 15;
+      tags.push('⚠️ Разная уп.');
+      details.push({ component: '📦 Упаковка', score: -15, matched: false, penalty: true });
+    }
+  }
+
+  // --- 5. V4.0: Триграммы с TOKEN SET RATIO ---
+  // Берём максимум из: прямого, сортированного, фонетического-сортированного сравнений
+  const n1_direct  = normalizeText(text1);
+  const n2_direct  = normalizeText(text2);
+  const n1_sorted  = normalizeText(text1, { sorted: true });
+  const n2_sorted  = normalizeText(text2, { sorted: true });
+  const n1_phsort  = normalizeText(text1, { sorted: true, phonetic: true });
+  const n2_phsort  = normalizeText(text2, { sorted: true, phonetic: true });
+
+  const triDirect = trigramSimilarity(n1_direct, n2_direct);
+  const triSorted = trigramSimilarity(n1_sorted, n2_sorted);
+  const triPhSorted = trigramSimilarity(n1_phsort, n2_phsort);
+  const triSim = Math.max(triDirect, triSorted, triPhSorted);
+
+  const triScore = Math.round(triSim * 30);
+  if (triScore > 0) {
+    score += triScore;
+    const mode = triPhSorted > triSorted && triPhSorted > triDirect ? ' (фон.)' :
+                 triSorted > triDirect ? ' (сорт.)' : '';
+    details.push({ component: `📊 Триграммы${mode}`, score: triScore, matched: triScore > 5 });
+    if (triPhSorted > triSorted && triPhSorted > triDirect) tags.push('🔤 Фонетика');
+    else if (triSorted > triDirect) tags.push('🔀 Token Set');
+  }
+
+  // --- 6. Токены (без стоп-слов) ---
+  const tokens1 = getSignificantTokens(text1);
+  const tokens2 = getSignificantTokens(text2);
+  const tset2 = new Set(tokens2);
+  const exactCommon = tokens1.filter(w => tset2.has(w) && w.length > 2);
+  if (exactCommon.length > 0) {
+    const tokScore = Math.min(15, exactCommon.length * 4);
+    score += tokScore;
+    details.push({ component: '📝 Слова', score: tokScore, matched: true });
+    exactCommon.forEach(w => matchedTokens.add(w));
+  }
+
+  // --- 7. Кросс-языковое + Jaro-Winkler ---
+  let crossScore = 0;
+  for (const t1 of tokens1) {
+    for (const t2 of tokens2) {
+      if (t1 === t2 || t1.length < 3 || t2.length < 3) continue;
+      const sim = crossLangSimilarity(t1, t2);
+      if (sim > 0.85) {
+        const bonus = Math.round((sim - 0.85) * 80);
+        crossScore = Math.max(crossScore, bonus);
+        matchedTokens.add(t2);
+        matchedTokens.add(t1);
+      }
+    }
+  }
+  if (crossScore > 0) {
+    score += crossScore;
+    details.push({ component: '🌐 Кросс-язык', score: crossScore, matched: true });
+  }
+
+  // --- 8. Числа (кроме веса) ---
+  const nums1 = extractNumbers(text1).filter(n => n !== (w1 ? w1.value : null) && n > 0);
+  const nums2 = extractNumbers(text2).filter(n => n !== (w2 ? w2.value : null) && n > 0);
+  const commonNums = nums1.filter(n => nums2.includes(n));
+  if (commonNums.length > 0) {
+    score += 8;
+    details.push({ component: '🔢 Числа', score: 8, matched: true });
+  }
+
+  const maxPossible = 108; // 30+15+15+10+30+15+12+8−max penalties
+  const finalPercent = Math.max(0, Math.min(100, Math.round(score / maxPossible * 100)));
+
+  return { score: finalPercent, rawScore: score, details, tags, matchedTokens, weightPenalty, weights: { w1, w2 } };
+}
+
+// =============================================================================
+// ЗАГРУЗКА ФАЙЛОВ
+// =============================================================================
+document.getElementById('jsonInput').addEventListener('change', handleBaseUpload);
+document.getElementById('priceInput').addEventListener('change', handlePriceUpload);
+
+async function handleBaseUpload(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  try {
+    showProgress('Загрузка базы синонимов...');
+    const fileName = file.name.toLowerCase();
+    if (fileName.endsWith('.json')) {
+      jsonData = JSON.parse(await file.text());
+    } else if (fileName.endsWith('.csv')) {
+      jsonData = convertTableToJSON(await parseCSV(file));
+    } else if (fileName.endsWith('.xlsx') || fileName.endsWith('.xls')) {
+      jsonData = convertTableToJSON(await parseExcel(file));
+    } else {
+      throw new Error('Неподдерживаемый формат файла');
+    }
+    document.getElementById('jsonBox').classList.add('loaded');
+    document.getElementById('jsonStatus').textContent = `✓ ${Object.keys(jsonData).length} записей`;
+    hideProgress();
+    checkAndAnalyze();
+  } catch (error) {
+    hideProgress();
+    alert('Ошибка загрузки базы: ' + error.message);
+  }
+}
+
+function convertTableToJSON(data) {
+  const result = {};
+  if (!data || data.length === 0) throw new Error('Файл пустой');
+  const barcodeCol = findColumn(data, BARCODE_COLS);
+  const nameCol = findColumn(data, NAME_COLS);
+  const synonymCol = findColumn(data, SYNONYM_COLS);
+  if (!barcodeCol || !nameCol) throw new Error('Не найдены обязательные колонки: Штрихкод и Название');
+  for (const row of data) {
+    const barcode = String(row[barcodeCol] || '').trim();
+    const name = String(row[nameCol] || '').trim();
+    const synonyms = synonymCol ? String(row[synonymCol] || '').trim() : '';
+    if (barcode && name) result[barcode] = [name, synonyms];
+  }
+  return result;
+}
+
+async function handlePriceUpload(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  try {
+    showProgress('Загрузка прайса...');
+    if (file.name.toLowerCase().endsWith('.csv')) {
+      priceData = await parseCSV(file);
+    } else {
+      priceData = await parseExcel(file);
+    }
+    document.getElementById('priceBox').classList.add('loaded');
+    document.getElementById('priceStatus').textContent = `✓ ${priceData.length} товаров`;
+    hideProgress();
+    checkAndAnalyze();
+  } catch (error) {
+    hideProgress();
+    alert('Ошибка загрузки прайса: ' + error.message);
+  }
+}
+
+function parseCSV(file) {
+  return new Promise((resolve, reject) => {
+    Papa.parse(file, {
+      header: true, skipEmptyLines: true,
+      complete: (results) => resolve(results.data),
+      error: (error) => reject(error)
+    });
+  });
+}
+
+function parseExcel(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const data = new Uint8Array(e.target.result);
+        const workbook = XLSX.read(data, { type: 'array' });
+        const sheet = workbook.Sheets[workbook.SheetNames[0]];
+        resolve(XLSX.utils.sheet_to_json(sheet));
+      } catch (error) { reject(error); }
+    };
+    reader.readAsArrayBuffer(file);
+  });
+}
+
+function checkAndAnalyze() {
+  if (Object.keys(jsonData).length > 0 && priceData.length > 0) {
+    performEnhancedMatching();
+  }
+}
+
+function findColumn(data, synonyms) {
+  if (!data || data.length === 0) return null;
+  const columns = Object.keys(data[0]);
+  return columns.find(col => synonyms.some(syn => col.toLowerCase().includes(syn.toLowerCase()))) || columns[0];
+}
+
+// =============================================================================
+// МАТЧИНГ
+// =============================================================================
+async function performEnhancedMatching() {
+  showProgress('Smart Matcher V4.1 — упаковка + ребрендинги + опечатки...');
+  matchResults = []; skippedItems = []; highMatches = []; reviewItems = []; allMatches = [];
+
+  const barcodeCol = findColumn(priceData, BARCODE_COLS);
+  const nameCol = findColumn(priceData, NAME_COLS);
+
+  if (!barcodeCol || !nameCol) {
+    hideProgress();
+    alert('Ошибка: не найдены столбцы "Штрихкод" и "Наименование" в прайсе');
+    return;
+  }
+
+  const jsonMap = new Map();
+  // V4.1: Map<barcode, {type,jsonKey,mainBarcode,name}> для причины пропуска
+  const allBarcodes = new Map();
+
+  for (const [key, value] of Object.entries(jsonData)) {
+    const keyIsBarcode = isBarcode(key);
+    let name = key;
+    let mainBarcode = keyIsBarcode ? key : '';
+    let synonyms = [];
+
+    if (Array.isArray(value)) {
+      if (value.length > 0 && value[0]) name = String(value[0]).trim();
+      if (value.length > 2) {
+        synonyms = value.slice(1).map(s => String(s).trim()).filter(s => s && isBarcode(s));
+      } else if (value.length === 2 && value[1]) {
+        const synonymsStr = String(value[1]).trim();
+        if (synonymsStr) synonyms = synonymsStr.split(';').map(s => s.trim()).filter(s => s && isBarcode(s));
+      }
+    }
+
+    jsonMap.set(key, { hasMainBarcode: keyIsBarcode, mainBarcode, name, synonyms });
+    if (keyIsBarcode) allBarcodes.set(key, { type: 'main', jsonKey: key, name });
+    synonyms.forEach(syn => allBarcodes.set(syn, { type: 'synonym', jsonKey: key, mainBarcode, name }));
+  }
+
+  for (let i = 0; i < priceData.length; i++) {
+    const row = priceData[i];
+    const barcode = String(row[barcodeCol] || '').trim();
+    const name = String(row[nameCol] || '').trim();
+    if (!barcode || !name) continue;
+
+    const candidates = [];
+    for (const [key, data] of jsonMap) {
+      const result = calculateSimilarity(name, data.name);
+      if (result.score >= SIMILARITY_THRESHOLD) {
+        candidates.push({ key, ...data, similarity: result.score, matchResult: result });
+      }
+    }
+
+    candidates.sort((a, b) => b.similarity - a.similarity);
+    const top3 = candidates.slice(0, 3);
+    const bestMatch = top3[0];
+
+    if (bestMatch) {
+      const dupInfo = allBarcodes.get(barcode);
+      const isDuplicate = !!dupInfo;
+      const sim = bestMatch.similarity;
+
+      if (isDuplicate) {
+        const skipReason = dupInfo.type === 'main'
+          ? 'Главный штрихкод'
+          : 'Синоним штрихкода';
+        const skipDetail = dupInfo.type === 'main'
+          ? `ШК ${barcode} — главный штрихкод товара "${dupInfo.name}"`
+          : `ШК ${barcode} — синоним товара "${dupInfo.name}" (главный ШК: ${dupInfo.mainBarcode || dupInfo.jsonKey})`;
+        skippedItems.push({ barcode, name, reason: 'duplicate', skipReason, skipDetail,
+          matchName: bestMatch.name, mainBarcode: bestMatch.mainBarcode, similarity: sim,
+          matchResult: bestMatch.matchResult, candidates: top3 });
+      } else {
+        const matchData = {
+          barcode, name,
+          mainBarcode: bestMatch.mainBarcode, mainName: bestMatch.name,
+          synonyms: bestMatch.synonyms, hasMainBarcode: bestMatch.hasMainBarcode,
+          jsonKey: bestMatch.key, similarity: sim,
+          matchResult: bestMatch.matchResult, candidates: top3,
+          weightPenalty: bestMatch.matchResult.weightPenalty
+        };
+        if (sim >= REVIEW_THRESHOLD) {
+          matchResults.push(matchData);
+          if (sim >= HIGH_THRESHOLD) highMatches.push(matchData);
+        } else {
+          reviewItems.push(matchData);
+        }
+      }
+      allMatches.push({ barcode, name, status: isDuplicate ? 'skipped' : 'new', similarity: sim, matchResult: bestMatch.matchResult });
+    }
+
+    if (i % 10 === 0) {
+      updateProgress((i / priceData.length) * 100);
+      await new Promise(resolve => setTimeout(resolve, 0));
+    }
+  }
+
+  matchResults.sort((a, b) => b.similarity - a.similarity);
+  reviewItems.sort((a, b) => b.similarity - a.similarity);
+
+  document.getElementById('statTotal').textContent = priceData.length;
+  document.getElementById('statNew').textContent = matchResults.length;
+  document.getElementById('statHigh').textContent = highMatches.length;
+  document.getElementById('statReview').textContent = reviewItems.length;
+  document.getElementById('statSkipped').textContent = skippedItems.length;
+  document.getElementById('statsBar').classList.add('show');
+  document.getElementById('resultsPanel').classList.add('show');
+
+  hideProgress();
+  filterByView('high');
+}
+
+// =============================================================================
+// ФИЛЬТРАЦИЯ И РЕНДЕР
+// =============================================================================
+function filterByView(view) {
+  currentView = view;
+  document.querySelectorAll('.stat-item').forEach(item => {
+    item.classList.remove('active');
+    if (item.dataset.view === view) item.classList.add('active');
+  });
+
+  if (view === 'high') {
+    document.getElementById('resultsTitle').textContent = '⭐ Высокая точность (≥80%)';
+    document.getElementById('resultsSubtitle').textContent = `${highMatches.length} товаров — скорее всего это синонимы`;
+    renderResults(highMatches, 'match');
+  } else if (view === 'new') {
+    const mid = matchResults.filter(r => r.similarity < HIGH_THRESHOLD);
+    document.getElementById('resultsTitle').textContent = '📊 Новые синонимы (60–79%)';
+    document.getElementById('resultsSubtitle').textContent = `${mid.length} товаров с хорошим совпадением`;
+    renderResults(mid, 'match');
+  } else if (view === 'review') {
+    document.getElementById('resultsTitle').textContent = '🔍 На проверке (42–59%) — сравните сами';
+    document.getElementById('resultsSubtitle').textContent = `${reviewItems.length} товаров — система предлагает кандидатов, вы решаете`;
+    renderResults(reviewItems, 'review');
+  } else if (view === 'skipped') {
+    document.getElementById('resultsTitle').textContent = '⏭️ Пропущенные (дубли)';
+    document.getElementById('resultsSubtitle').textContent = `${skippedItems.length} товаров уже есть в базе`;
+    renderResults(skippedItems, 'skipped');
+  } else {
+    document.getElementById('resultsTitle').textContent = '📋 Все найденные совпадения';
+    document.getElementById('resultsSubtitle').textContent = `${allMatches.length} товаров`;
+    renderResults(allMatches, 'all');
+  }
+}
+
+function highlightMatches(text, matchedTokens) {
+  if (!matchedTokens || matchedTokens.size === 0) return text;
+  let result = text;
+  for (const token of matchedTokens) {
+    try {
+      const regex = new RegExp(`(${token.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+      result = result.replace(regex, '<span class="highlight">$1</span>');
+    } catch(e) {}
+  }
+  return result;
+}
+
+function renderResults(items, type) {
+  const container = document.getElementById('resultsList');
+
+  if (items.length === 0) {
+    const emptyMessages = {
+      'match': 'Новых синонимов не найдено',
+      'skipped': 'Нет пропущенных товаров',
+      'high': 'Нет товаров с высокой схожестью',
+    };
+    container.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-icon">✓</div>
+        <div style="font-size:18px;font-weight:600;margin-bottom:8px;">${emptyMessages[type] || 'Нет результатов'}</div>
+      </div>`;
+    return;
+  }
+
+  let html = '';
+
+  items.forEach((result, index) => {
+    const sim = result.similarity || 0;
+    const mr = result.matchResult || {};
+    let cardClass, simClass, actionLabel, actionClass;
+
+    if (type === 'skipped') {
+      cardClass = 'skipped-card'; simClass = 'skip'; actionLabel = '⏭️ Дубль'; actionClass = 'action-skip';
+    } else if (type === 'review') {
+      cardClass = 'review-card'; simClass = 'review'; actionLabel = '🔍 На проверке'; actionClass = 'action-review';
+    } else {
+      cardClass = sim >= 80 ? 'high-match' : 'medium-match';
+      simClass = sim >= 80 ? 'high' : 'medium';
+      actionLabel = result.hasMainBarcode ? '➕ Синоним' : '⭐ Главный';
+      actionClass = result.hasMainBarcode ? 'action-synonym' : 'action-main';
+    }
+
+    const matchTags = (mr.tags || []).map(t => `<span class="match-tag">${t}</span>`).join('');
+    const mainName = type === 'skipped' ? (result.matchName || '') : (result.mainName || '');
+    const highlightedPriceName = highlightMatches(result.name, mr.matchedTokens);
+    const highlightedJsonName = highlightMatches(mainName, mr.matchedTokens);
+
+    // Нормализованные строки для отладки
+    const normA = normalizeText(result.name, { sorted: true });
+    const normB = normalizeText(mainName, { sorted: true });
+
+    let scoreDetails = '';
+    if (mr.details) {
+      scoreDetails = mr.details.filter(d => d.score !== 0).map(d =>
+        `<span class="score-item" style="${d.penalty ? 'background:#fff0f0' : ''}">
+          <span class="score-icon">${d.component.split(' ')[0]}</span>
+          <span style="color:${d.penalty ? '#ff3b30' : '#34c759'}">${d.score > 0 ? '+' : ''}${d.score}</span>
+        </span>`
+      ).join('');
+    }
+
+    const weightWarn = (result.weightPenalty || mr.weightPenalty) ?
+      `<div class="weight-warning">⚠️ Разный вес — вероятно разные товары!</div>` : '';
+
+    let candidatesHtml = '';
+    if (result.candidates && result.candidates.length > 1) {
+      const cands = result.candidates.slice(0, 3).map((c, ci) => {
+        const cSim = c.similarity;
+        const cColor = cSim >= 80 ? '#34c759' : cSim >= 60 ? '#ff9500' : '#af52de';
+        const isMain = ci === 0;
+        return `
+          <div class="candidate-item ${isMain ? 'selected' : ''}"
+               onclick="selectCandidate(event, ${index}, ${ci}, '${type}')">
+            <span class="candidate-score" style="background:${cColor}">${cSim}%</span>
+            <span class="candidate-name">${c.name}</span>
+            <span class="candidate-bc">${c.mainBarcode || c.key || ''}</span>
+            ${type !== 'skipped' ? `<button class="select-candidate-btn" onclick="selectAndConfirm(event,${index},${ci},'${type}')">Выбрать</button>` : ''}
+          </div>`;
+      }).join('');
+      candidatesHtml = `
+        <div class="candidates-section">
+          <div class="candidates-title">🔎 Кандидаты (${result.candidates.length} найдено)</div>
+          ${cands}
+        </div>`;
+    }
+
+    const clickable = type !== 'skipped' ? `onclick="showConfirmModal(${index}, '${type}')"` : '';
+
+    html += `
+      <div class="result-card ${cardClass}" ${clickable}>
+        <div class="card-header">
+          <div class="card-left">
+            <span class="similarity-badge similarity-${simClass}">${sim}%</span>
+            <div class="match-tags">${matchTags}</div>
+          </div>
+          <span class="action-badge ${actionClass}">${actionLabel}</span>
+        </div>
+        ${type === 'skipped' && result.skipReason ? `
+          <div class="skip-reason-box ${result.skipReason === 'Главный штрихкод' ? 'is-main' : 'is-synonym'}">
+            <span>${result.skipReason === 'Главный штрихкод' ? '🔑 Главный штрихкод' : '🔗 Синоним штрихкода'}</span>
+            <span class="skip-reason-detail">${result.skipDetail || ''}</span>
+          </div>` : ''}
+        <div class="comparison-vertical">
+          <div class="name-box price-box">
+            <div class="name-label"><span>📄</span><span>Новый товар</span></div>
+            <div class="name-text">${highlightedPriceName}</div>
+            <div class="barcode-info">ШК: ${result.barcode}</div>
+            <div class="name-norm">→ ${normA}</div>
+          </div>
+          <div class="name-box json-box">
+            <div class="name-label"><span>📦</span><span>В базе (лучшее совпадение)</span></div>
+            <div class="name-text">${highlightedJsonName}</div>
+            <div class="barcode-info">ШК: ${result.mainBarcode || result.hasMainBarcode ? (result.mainBarcode || result.key) : '[Нет ШК]'}</div>
+            <div class="name-norm">→ ${normB}</div>
+          </div>
+        </div>
+        ${weightWarn}
+        ${scoreDetails ? `<div class="score-details">${scoreDetails}</div>` : ''}
+        ${candidatesHtml}
+      </div>`;
+  });
+
+  container.innerHTML = html;
+}
+
+// =============================================================================
+// ВЫБОР КАНДИДАТА
+// =============================================================================
+function selectCandidate(e, itemIndex, candidateIndex, type) {
+  e.stopPropagation();
+  const list = type === 'high' ? highMatches :
+               type === 'new' ? matchResults.filter(r => r.similarity < HIGH_THRESHOLD) :
+               type === 'review' ? reviewItems : skippedItems;
+  if (!list[itemIndex] || !list[itemIndex].candidates) return;
+  const cands = list[itemIndex].candidates;
+  const chosen = cands.splice(candidateIndex, 1)[0];
+  cands.unshift(chosen);
+  list[itemIndex].mainBarcode = chosen.mainBarcode;
+  list[itemIndex].mainName = chosen.name;
+  list[itemIndex].hasMainBarcode = chosen.hasMainBarcode;
+  list[itemIndex].jsonKey = chosen.key;
+  list[itemIndex].similarity = chosen.similarity;
+  list[itemIndex].matchResult = chosen.matchResult;
+  list[itemIndex].weightPenalty = chosen.matchResult.weightPenalty;
+  filterByView(currentView);
+}
+
+function selectAndConfirm(e, itemIndex, candidateIndex, type) {
+  e.stopPropagation();
+  selectCandidate(e, itemIndex, candidateIndex, type);
+  showConfirmModal(itemIndex, type);
+}
+
+// =============================================================================
+// МОДАЛКА ПОДТВЕРЖДЕНИЯ
+// =============================================================================
+function showConfirmModal(index, type) {
+  let list;
+  if (type === 'high') list = highMatches;
+  else if (type === 'review') list = reviewItems;
+  else list = matchResults.filter(r => r.similarity < HIGH_THRESHOLD);
+
+  const result = list[index];
+  if (!result) return;
+  pendingAction = result;
+
+  document.getElementById('modalSimilarity').textContent = result.similarity + '%';
+  document.getElementById('modalPriceBarcode').textContent = result.barcode;
+  document.getElementById('modalPriceName').textContent = result.name.toUpperCase();
+
+  const modalMainBarcode = document.getElementById('modalMainBarcode');
+  modalMainBarcode.textContent = result.hasMainBarcode ? result.mainBarcode : '[Нет главного ШК]';
+  document.getElementById('modalMainName').textContent = result.mainName.toUpperCase();
+
+  const actionInfoCompact = document.getElementById('actionInfoCompact');
+  const confirmBtn = document.getElementById('confirmBtn');
+
+  if (result.hasMainBarcode) {
+    actionInfoCompact.className = 'action-info-compact';
+    document.getElementById('actionTextCompact').textContent = '➕ Штрихкод будет добавлен как синоним к существующему товару';
+    confirmBtn.textContent = '✓ Добавить синоним';
+  } else {
+    actionInfoCompact.className = 'action-info-compact main';
+    document.getElementById('actionTextCompact').textContent = '⭐ Штрихкод станет ГЛАВНЫМ для этого товара (у товара сейчас нет главного ШК)';
+    confirmBtn.textContent = '⭐ Сделать главным';
+  }
+
+  document.getElementById('confirmModal').classList.add('show');
+}
+
+function closeModal() {
+  document.getElementById('confirmModal').classList.remove('show');
+  pendingAction = null;
+}
+
+function confirmAction() {
+  if (!pendingAction) return;
+  const action = pendingAction.hasMainBarcode ? 'add_synonym' : 'set_main';
+  changesMap.set(pendingAction.barcode, {
+    action, mainBarcode: pendingAction.mainBarcode || '',
+    jsonKey: pendingAction.jsonKey || '',
+    newBarcode: pendingAction.barcode, newName: pendingAction.name,
+    mainName: pendingAction.mainName, similarity: pendingAction.similarity
+  });
+
+  const bc = pendingAction.barcode;
+  matchResults = matchResults.filter(r => r.barcode !== bc);
+  highMatches = highMatches.filter(r => r.barcode !== bc);
+  reviewItems = reviewItems.filter(r => r.barcode !== bc);
+
+  document.getElementById('statNew').textContent = matchResults.length;
+  document.getElementById('statHigh').textContent = highMatches.length;
+  document.getElementById('statReview').textContent = reviewItems.length;
+  document.getElementById('exportTopCount').textContent = changesMap.size;
+  document.getElementById('exportTopBtn').classList.add('show');
+
+  closeModal();
+  filterByView(currentView);
+}
+
+// =============================================================================
+// ЭКСПОРТ JSON
+// =============================================================================
+async function exportJSON() {
+  const updated = JSON.parse(JSON.stringify(jsonData));
+
+  changesMap.forEach((change, barcode) => {
+    if (change.action === 'add_synonym') {
+      const lookupKey = change.jsonKey || change.mainBarcode;
+      const currentData = updated[lookupKey];
+      if (Array.isArray(currentData) && currentData.length >= 1) {
+        const name = currentData[0];
+        let synonyms = [];
+        if (currentData.length > 2) {
+          synonyms = currentData.slice(1).map(s => String(s).trim()).filter(Boolean);
+        } else if (currentData.length === 2 && currentData[1]) {
+          synonyms = String(currentData[1]).trim().split(';').map(s => s.trim()).filter(Boolean);
+        }
+        if (barcode && !synonyms.includes(barcode)) synonyms.push(barcode);
+        updated[lookupKey] = [name, ...synonyms];
+      }
+    } else if (change.action === 'set_main') {
+      updated[barcode] = [change.mainName];
+      if (updated[change.jsonKey]) delete updated[change.jsonKey];
+    }
+  });
+
+  const json = JSON.stringify(updated, null, 2);
+  const timestamp = new Date().toISOString().slice(0, 10);
+  const fileName = `synonyms_v41_${timestamp}.json`;
+
+  if (window.showSaveFilePicker) {
+    try {
+      const fileHandle = await window.showSaveFilePicker({
+        suggestedName: fileName,
+        types: [{ description: 'JSON файл', accept: { 'application/json': ['.json'] } }]
+      });
+      const writable = await fileHandle.createWritable();
+      await writable.write(json);
+      await writable.close();
+      alert(`✅ JSON успешно сохранён!\n\nДобавлено: ${changesMap.size} изменений\nФайл: ${fileHandle.name}`);
+      return;
+    } catch (err) {
+      if (err.name === 'AbortError') return;
+    }
+  }
+
+  const blob = new Blob([json], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = fileName;
+  document.body.appendChild(a); a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  alert(`✅ JSON обновлён!\n\nДобавлено: ${changesMap.size} изменений\nФайл: ${fileName}`);
+}
+
+function isBarcode(str) { return /^\d{8,14}$/.test(String(str).trim()); }
+function showProgress(text) {
+  document.getElementById('progressBar').classList.add('show');
+  document.getElementById('progressText').textContent = text;
+  document.getElementById('progressFill').style.width = '0%';
+}
+function updateProgress(percent) { document.getElementById('progressFill').style.width = percent + '%'; }
+function hideProgress() { document.getElementById('progressBar').classList.remove('show'); }
+
+document.getElementById('confirmModal').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+</script>
+
+<script>
 (function(){
   const href = location.href;
   document.querySelectorAll('.global-nav__link').forEach(a => {
     const m = a.getAttribute('data-match') || '';
     if (m && href.includes(m)) a.classList.add('is-active');
-    // запасной вариант: если совпадает дом+путь целиком
     if (!m && href.startsWith(a.href)) a.classList.add('is-active');
   });
 })();
